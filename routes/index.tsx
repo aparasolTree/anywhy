@@ -1,5 +1,5 @@
 import { useSignal } from "@preact/signals";
-import { define } from "../utils.ts";
+import { define } from "../utils/define.ts";
 import Counter from "../islands/Counter.tsx";
 
 export default define.page(function Home() {

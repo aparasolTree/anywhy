@@ -62,7 +62,7 @@ export function ImagePreview({ imageEntries, page, limit }: ImagePreviewProps) {
     const onFetchMore = async (unobserver: AnyFuncion) => {
         if (ref.current.done) return unobserver();
         if (ref.current.state === "loading") return;
-        const { clear, signal } = createTimeoutSignal(5000);
+        const { clear, signal } = createTimeoutSignal(10000);
         setRef({ state: "loading", clear });
         try {
             type FetchData = { imageEntries: ImageEntry[]; page: number; limit: number; done: boolean };

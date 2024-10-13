@@ -4,7 +4,7 @@ import { createAdmin } from "./utils/kv/index.ts";
 
 import "@std/dotenv/load";
 
-export const app = new App<State>();
+export const app = new App<State>({ root: import.meta.url });
 app.use(staticFiles())
     .use(trailingSlashes("never"));
 

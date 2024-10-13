@@ -1,5 +1,4 @@
 {
-    "nodeModulesDir": "auto",
     "tasks": {
         "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
         "dev": "deno run -A --unstable-kv --watch=static/,routes/,doc/ dev.ts",

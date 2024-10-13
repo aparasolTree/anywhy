@@ -10,7 +10,7 @@ import { getImage } from "../../utils/image.ts";
 // import { getFile } from "../../utils/file_upload_local_test/get.ts";
 
 const randomName = () => Math.random().toString(16).slice(2);
-export const cache = await createImageCache(":memory:", { expireIn: 1000 * 60 * 60 * 24 });
+export const cache = await createImageCache({ expireIn: 1000 * 60 * 60 * 24 });
 
 export const handler = define.handlers(async ({ params, url, req, info }) => {
     const { getUser } = await getUserSession(req);

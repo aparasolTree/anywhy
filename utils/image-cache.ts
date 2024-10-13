@@ -17,11 +17,10 @@ const CACHE_DATA_KEY = "CACHE_DATA_KEY";
 const CACHE_URL_KEY = "CACHE_URL_KEY";
 
 export async function createImageCache(
-    path: string = ":memory:",
     { expireIn = 1000 * 60 * 60 * 24 }: { expireIn?: number } = {},
 ) {
     let saveSize = 0, count = 0;
-    const cachedKv = await Deno.openKv(path);
+    const cachedKv = await Deno.openKv();
     const HEADER_KEY = [CACHE_KEY, CACHE_HEADER_KEY];
     const DATA_KEY = [CACHE_KEY, CACHE_DATA_KEY];
     const URL_KEY = [CACHE_KEY, CACHE_URL_KEY];
@@ -62,7 +61,6 @@ export async function createImageCache(
     return {
         getCachedSize: () => saveSize,
         getCachedImageCount: () => count,
-        getCachedPath: () => path,
         has: async (request: Request) => {
             request = ignoreSearchParams(request);
             return !!(await cachedKv.get([...URL_KEY, request.url])).value;

@@ -7,7 +7,6 @@ export const handler = define.handlers({
         return json({
             size: cache.getCachedSize(),
             count: cache.getCachedImageCount(),
-            path: cache.getCachedPath(),
         });
     },
 });

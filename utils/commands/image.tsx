@@ -69,7 +69,6 @@ imageCommand.add(({ cache, reload = false }) => {
                         value="idle"
                         content={data && (
                             <Table data={[data]}>
-                                <TableColumn dataKey="path" title="缓存路径" />
                                 <TableColumn dataKey="count" title="缓存数量" />
                                 <TableColumn
                                     dataKey="size"
@@ -217,69 +216,3 @@ imageCommand.add((args) => {
         );
     };
 });
-
-// const imageCommandHelp = {
-//     list: {
-//         description: "获取图片数据",
-//         example:
-//             "image --list [-p/--page 1] [-l/--limit 1] [-f/--filter 'views>=10'] [-k/--pick id,name,views,downloads] [--reload]",
-//         args: [
-//             ["-p, --page <string> deault: 1", "当前页数"],
-//             ["-l, --limit <string> deault: 1", "当前页数数据量限制"],
-//             ["-f, --filter <string>", "数据过滤，多个限制条件之间使用 & 符号连接"],
-//             ["-s, --sort <string> default: createAt", "通过指定的键对数据进行排序"],
-//             ["-o, --order <string> default: des", "对数据进行降序或升序排序"],
-//             ["--reload <boolean> default: false", "重新请求数据，并进行缓存"],
-//             [
-//                 `-k, --pick <string> default: ${Object.keys(entryKeyMap).join(",")}`,
-//                 "对请求响应的数据对象进行指定键的选取，多个键之间使用 , 连接",
-//             ],
-//         ],
-//     },
-//     remove: {
-//         description: "删除图片",
-//         example: "image --remove --id [image-id]",
-//         args: [
-//             ["--id <string>", "指定图片id进行删除"],
-//         ],
-//     },
-//     cache: {
-//         description: "查看图片缓存",
-//         example: "image --cache [--reload]",
-//         args: [
-//             ["--reload <boolean> default: false", "重新请求数据，并进行缓存"],
-//         ],
-//     },
-//     help: {
-//         description: "获取命令行参数提示",
-//         example: "image --help",
-//         args: [],
-//     },
-// };
-// imageCommand.add(({ help }) => {
-//     if (!help) return null;
-//     return ({ command }) => (
-//         <CommandRecord command={command}>
-//             <p>获取图片数据/删除图片/查看图片缓存/获取帮助提示</p>
-//             {Object.entries(imageCommandHelp).map(([command, { description, example, args }]) => {
-//                 return (
-//                     <div class="pl-4 my-4">
-//                         <p class="text-xl text-red-500">{command}</p>
-//                         <div class="pl-4">
-//                             <p>{description}</p>
-//                             <p class="text-gray-400">案例：{example}</p>
-//                             <div class="pl-4 grid grid-cols-2">
-//                                 {args.map(([option, optionDescription]) => (
-//                                     <>
-//                                         <span>{option}</span>
-//                                         <span>{optionDescription}</span>
-//                                     </>
-//                                 ))}
-//                             </div>
-//                         </div>
-//                     </div>
-//                 );
-//             })}
-//         </CommandRecord>
-//     );
-// });

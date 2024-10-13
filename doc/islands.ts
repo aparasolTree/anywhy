@@ -10,7 +10,7 @@ export async function addIslands<State>(app: App<State>) {
     for await (const { name, path } of walkIter) {
         if (!IS_LAND.test(name)) continue;
         const filePath = new URL(join("..", path), import.meta.url);
-        const map = await import(filePath.toString());
+        const map = await import(`../${path}`);
         for (const key of Object.keys(map)) {
             app.island(fromFileUrl(filePath.toString()), key, map[key]);
             ExampleComponents[key] = map[key];

@@ -13,7 +13,7 @@ import { uuid } from "../cropty.ts";
 import { badRequest } from "../response.ts";
 import { ExifInfo, ImageEntry, Size } from "../type.ts";
 import { formatDate } from "../formatDate.ts";
-import { CsvParseStream } from "@std/csv/parse-stream";
+import { CsvParseStream } from "@std/csv";
 import { escape, unescape } from "../cookie/escape.ts";
 
 export function createImageEntry(

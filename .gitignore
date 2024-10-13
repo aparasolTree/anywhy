@@ -11,3 +11,8 @@ _fresh/
 node_modules/
 vendor/
 
+upload/
+
+anywhy.db
+anywhy.db-shm
+anywhy.db-wal

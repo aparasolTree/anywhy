@@ -1,10 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-  .fresh-gradient {
-    background-color: rgb(134, 239, 172);
-    background-image: linear-gradient(to right bottom, rgb(219, 234, 254), rgb(187, 247, 208), rgb(254, 249, 195));
-  }
-  
 
+body {
+    font-family: "ZCOOL KuaiLe", sans-serif !important;
+    font-weight: 400;
+    font-style: normal;
+}
+
+@keyframes toast-enter {
+    0% {
+        transform: scale(0.5) translateY(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toast-leave {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.5) translateY(-100%);
+        opacity: 0;
+    }
+}
+
+
+.toast-enter {
+    animation: toast-enter 150ms ease-in-out forwards;
+}
+
+.toast-leave {
+    animation: toast-leave 150ms ease-in-out forwards;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    padding-right: 2px;
+}
+
+/* 滚动条里面滑块 */
+*::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #999;
+    cursor: pointer;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/*滚动条里面轨道*/
+*::-webkit-scrollbar-track {
+    border-radius: 10px;
+}

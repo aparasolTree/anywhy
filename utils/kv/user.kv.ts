@@ -11,7 +11,7 @@ import {
     USER_SESSION_EXPIRES,
 } from "../constant.ts";
 import { badRequest } from "../response.ts";
-import { CsvParseStream } from "@std/csv/parse-stream";
+import { CsvParseStream } from "@std/csv";
 import { escape } from "../cookie/escape.ts";
 import { unescape } from "../cookie/escape.ts";
 

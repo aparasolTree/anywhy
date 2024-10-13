@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        main {
+            font-size: 14px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <main style="margin: 0 auto; margin-top: 40px; max-width: 550px;font-size: 14px; font-weight: 700;">
+        <header style="display: flex; justify-content: center; margin-bottom: 40px;">
+            <h1 style="font-size: 20px; font-weight: 700;">AnyWhy</h1>
+        </header>
+        <img src="{{domain}}/welcome.jpg" alt="welcome" style="border-radius: 10px; margin-bottom: 10px; width: 100%;">
+        <section>
+            <span style="font-weight: 700;">(｡･∀･)ﾉﾞ 呦！</span>
+            <p>欢迎来到我的网站，希望你能在这里有一个愉快的体验。请点击下方的链接，登录网站。</p>
+            <a href="{{verifyLink}}"
+                style="display: block; text-decoration: none; background-color: rgb(34 197 94); color: white; border-radius: 0.5rem; width: 130px; text-align: center; padding:0.5rem 0;">
+                {{state}}
+            </a>
+            <p><span style="font-size: 14px; font-weight: 700;">(づ￣3￣)づ</span>&nbsp;&nbsp;&nbsp;谢谢</p>
+            <p style="text-align: end;">—— 徐乐</p>
+            <div
+                style="display: flex; flex-direction: column; align-items: center; background-color: rgb(226 232 240); padding: 0.5rem 0; margin-top: 1rem; border-radius: 0.5rem;">
+                <p>
+                    🙀 此链接的有效时间为
+                    <span>5分钟</span>
+                </p>
+                <p style="margin: 0.75rem 0;">
+                    <a href="{{domain}}/login"
+                        style="background-color: #333; color: white; padding: 0.5rem 1.25rem; font-size: 0.75rem; line-height: 1rem; border-radius: 0.375rem">
+                        点击此处重新请求链接
+                    </a>
+                </p>
+                <p style="color: rgb(250, 0, 0, .6); font-size: 12px;">请确保链接在同一浏览器中打开</p>
+            </div>
+        </section>
+        <hr style="margin: 2rem 0; height: 1px; background-color: #aaa; opacity: 0.6;" />
+        <div style="font-size: 12px; text-align: center; color: rgb(148 163 184);margin-bottom: 1rem;">
+            <p>你收到这封邮件是因您的电子邮件地址被用于在 <a href="{{domain}}" style="margin: 0 2px;">anywhy.deno.dev</a> 登录/注册。
+            </p>
+            <p>如果您当前没有登录/注册的想法，可以随时忽略这封电子邮件。</p>
+        </div>
+    </main>
+</body>
+
+</html>

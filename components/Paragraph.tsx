@@ -9,7 +9,6 @@ for await (const { name } of walk(ExamplePath)) {
     ExampleComponents[name] = Component.default;
 }
 
-console.log(ExampleComponents);
 export function Paragraph({
     code,
     children,

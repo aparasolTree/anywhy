@@ -32,7 +32,7 @@ function useUpdate() {
     return useCallback(() => update(0), []);
 }
 
-export function UsePropsValue() {
+export default function UsePropsValue() {
     const [checked, { toggle }] = useToggleState();
     return (
         <div class="flex justify-center gap-4">

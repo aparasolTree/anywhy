@@ -33,4 +33,4 @@ function useHover(initState: boolean = false) {
 
 ## 例子
 
-[example: UseHover]
+[example: UseHover.tsx]

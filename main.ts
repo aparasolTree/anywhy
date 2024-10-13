@@ -1,7 +1,6 @@
 import { App, fsRoutes, staticFiles, trailingSlashes } from "fresh";
 import { type State } from "./utils/define.ts";
 import { createAdmin } from "./utils/kv/index.ts";
-import { addIslands } from "./doc/islands.ts";
 
 import "@std/dotenv/load";
 
@@ -10,7 +9,6 @@ app.use(staticFiles())
     .use(trailingSlashes("never"));
 
 await createAdmin();
-await addIslands(app);
 
 await fsRoutes(app, {
     dir: "./",

@@ -51,4 +51,4 @@ function useUpdate() {
 
 ## 例子
 
-[example: UsePropsValue]
+[example: UsePropsValue.tsx]

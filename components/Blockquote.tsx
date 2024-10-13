@@ -1,5 +1,4 @@
 import { JSX } from "preact";
-import { WarnSVG } from "./svg/WarnSVG.tsx";
 import { NoticeSVG } from "./svg/NoticeSVG.tsx";
 
 const tipStyle = {

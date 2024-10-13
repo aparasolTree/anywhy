@@ -1,6 +1,6 @@
 import { useAnimationToggle } from "../../hooks/useAnimationToggle.ts";
 
-export function UseAnimationToggle() {
+export default function UseAnimationToggle() {
     const [{ enter, remove }, toggle] = useAnimationToggle(true, { timeout: 2000 });
     return (
         <div>

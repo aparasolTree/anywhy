@@ -81,4 +81,4 @@ export function useAnimationToggle(
 
 ## 例子
 
-[example: UseAnimationToggle]
+[example: UseAnimationToggle.tsx]

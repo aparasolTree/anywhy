@@ -12,7 +12,7 @@ export async function addIslands<State>(app: App<State>) {
         const filePath = new URL(join("..", path), import.meta.url);
         const map = await import(filePath.toString());
         for (const key of Object.keys(map)) {
-            app.island(join(import.meta.dirname, "..", path), key, map[key]);
+            app.island(filePath, key, map[key]);
             ExampleComponents[key] = map[key];
         }
     }

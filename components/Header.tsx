@@ -107,12 +107,7 @@ export function UserInfo({ user, active }: UserProps) {
                         退出登录
                     </button>
                 </form>
-                {user.role === "admin" && !active.includes("/admin") && <UserAdmin />}
             </DropDownContent>
         </DropDown>
     );
-}
-
-function UserAdmin() {
-    return <a href="/admin">进入后台 😎</a>;
 }

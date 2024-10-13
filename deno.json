@@ -9,21 +9,9 @@
         "kv:reset": "deno run --unstable-kv -A ./tasks/resetKv.ts",
         "fake": "deno run --unstable-kv -A ./tasks/fake.ts"
     },
-    "lint": {
-        "rules": {
-            "tags": [
-                "fresh",
-                "recommended"
-            ]
-        }
-    },
-    "fmt": {
-        "indentWidth": 4,
-        "lineWidth": 120
-    },
-    "exclude": [
-        "**/_fresh/*"
-    ],
+    "lint": { "rules": { "tags": ["fresh", "recommended"] } },
+    "fmt": { "indentWidth": 4, "lineWidth": 120 },
+    "exclude": ["**/_fresh/*"],
     "imports": {
         "@deno/gfm": "jsr:@deno/gfm@^0.9.0",
         "@fresh/plugin-tailwind": "jsr:@fresh/plugin-tailwind@^0.0.1-alpha.7",
@@ -39,28 +27,15 @@
         "@std/path": "jsr:@std/path@^1.0.4",
         "@std/streams": "jsr:@std/streams@^1.0.6",
         "@std/ulid": "jsr:@std/ulid@^1.0.0",
-        "fresh": "jsr:@fresh/core@^2.0.0-alpha.20",
-        "preact": "npm:preact@^10.23.2",
+        "fresh": "jsr:@fresh/core@^2.0.0-alpha.22",
+        "preact": "npm:preact@^10.24.2",
         "tailwindcss": "npm:tailwindcss@3.4.3",
         "tailwindcss/plugin": "npm:tailwindcss@3.4.3/plugin.js"
     },
     "compilerOptions": {
-        "lib": [
-            "dom",
-            "dom.asynciterable",
-            "deno.ns",
-            "deno.unstable",
-            "dom.iterable"
-        ],
+        "lib": ["dom", "dom.asynciterable", "deno.ns", "deno.unstable", "dom.iterable"],
         "jsx": "precompile",
         "jsxImportSource": "preact",
-        "jsxPrecompileSkipElements": [
-            "a",
-            "img",
-            "source",
-            "body",
-            "html",
-            "head"
-        ]
+        "jsxPrecompileSkipElements": ["a", "img", "source", "body", "html", "head"]
     }
 }

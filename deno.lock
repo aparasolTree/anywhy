@@ -4,7 +4,7 @@
     "specifiers": {
       "jsr:@deno/gfm@^0.9.0": "jsr:@deno/gfm@0.9.0",
       "jsr:@denosaurs/emoji@0.3": "jsr:@denosaurs/emoji@0.3.1",
-      "jsr:@fresh/core@^2.0.0-alpha.20": "jsr:@fresh/core@2.0.0-alpha.22",
+      "jsr:@fresh/core@^2.0.0-alpha.22": "jsr:@fresh/core@2.0.0-alpha.22",
       "jsr:@fresh/plugin-tailwind@^0.0.1-alpha.7": "jsr:@fresh/plugin-tailwind@0.0.1-alpha.7",
       "jsr:@luca/esbuild-deno-loader@^0.10.3": "jsr:@luca/esbuild-deno-loader@0.10.3",
       "jsr:@std/assert@^0.213.1": "jsr:@std/assert@0.213.1",
@@ -41,6 +41,7 @@
       "jsr:@std/ulid@^1.0.0": "jsr:@std/ulid@1.0.0",
       "jsr:@std/yaml@^1.0.5": "jsr:@std/yaml@1.0.5",
       "npm:@preact/signals@^1.2.3": "npm:@preact/signals@1.3.0_preact@10.24.2",
+      "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:ali-oss": "npm:ali-oss@6.21.0",
       "npm:autoprefixer@10.4.17": "npm:autoprefixer@10.4.17_postcss@8.4.35",
       "npm:cssnano@6.0.3": "npm:cssnano@6.0.3_postcss@8.4.35",
@@ -58,11 +59,12 @@
       "npm:postcss@8.4.35": "npm:postcss@8.4.35",
       "npm:preact-render-to-string@^6.5.11": "npm:preact-render-to-string@6.5.11_preact@10.24.2",
       "npm:preact@10.24.2": "npm:preact@10.24.2",
-      "npm:preact@^10.23.2": "npm:preact@10.24.2",
       "npm:preact@^10.24.1": "npm:preact@10.24.2",
+      "npm:preact@^10.24.2": "npm:preact@10.24.2",
       "npm:prismjs@1.29.0": "npm:prismjs@1.29.0",
       "npm:prismjs@^1.29": "npm:prismjs@1.29.0",
       "npm:sanitize-html@^2.11": "npm:sanitize-html@2.13.1",
+      "npm:tailwindcss@3.4.3": "npm:tailwindcss@3.4.3_postcss@8.4.35",
       "npm:tailwindcss@^3.4.1": "npm:tailwindcss@3.4.13_postcss@8.4.35"
     },
     "jsr": {
@@ -102,8 +104,8 @@
           "npm:esbuild-wasm@0.23.1",
           "npm:esbuild@0.23.1",
           "npm:preact-render-to-string@^6.5.11",
-          "npm:preact@^10.23.2",
-          "npm:preact@^10.24.1"
+          "npm:preact@^10.24.1",
+          "npm:preact@^10.24.2"
         ]
       },
       "@fresh/plugin-tailwind@0.0.1-alpha.7": {
@@ -423,6 +425,10 @@
       },
       "@trysound/sax@0.2.0": {
         "integrity": "sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==",
+        "dependencies": {}
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
         "dependencies": {}
       },
       "@xmldom/xmldom@0.8.10": {
@@ -1879,6 +1885,33 @@
           "sucrase": "sucrase@3.35.0"
         }
       },
+      "tailwindcss@3.4.3_postcss@8.4.35": {
+        "integrity": "sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==",
+        "dependencies": {
+          "@alloc/quick-lru": "@alloc/quick-lru@5.2.0",
+          "arg": "arg@5.0.2",
+          "chokidar": "chokidar@3.6.0",
+          "didyoumean": "didyoumean@1.2.2",
+          "dlv": "dlv@1.1.3",
+          "fast-glob": "fast-glob@3.3.2",
+          "glob-parent": "glob-parent@6.0.2",
+          "is-glob": "is-glob@4.0.3",
+          "jiti": "jiti@1.21.6",
+          "lilconfig": "lilconfig@2.1.0",
+          "micromatch": "micromatch@4.0.8",
+          "normalize-path": "normalize-path@3.0.0",
+          "object-hash": "object-hash@3.0.0",
+          "picocolors": "picocolors@1.1.0",
+          "postcss": "postcss@8.4.35",
+          "postcss-import": "postcss-import@15.1.0_postcss@8.4.35",
+          "postcss-js": "postcss-js@4.0.1_postcss@8.4.35",
+          "postcss-load-config": "postcss-load-config@4.0.2_postcss@8.4.35",
+          "postcss-nested": "postcss-nested@6.2.0_postcss@8.4.35",
+          "postcss-selector-parser": "postcss-selector-parser@6.1.2",
+          "resolve": "resolve@1.22.8",
+          "sucrase": "sucrase@3.35.0"
+        }
+      },
       "thenify-all@1.6.0": {
         "integrity": "sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==",
         "dependencies": {
@@ -2011,7 +2044,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@deno/gfm@^0.9.0",
-      "jsr:@fresh/core@^2.0.0-alpha.20",
+      "jsr:@fresh/core@^2.0.0-alpha.22",
       "jsr:@fresh/plugin-tailwind@^0.0.1-alpha.7",
       "jsr:@std/bytes@^1.0.2",
       "jsr:@std/cli@^1.0.6",
@@ -2025,7 +2058,7 @@
       "jsr:@std/streams@^1.0.6",
       "jsr:@std/ulid@^1.0.0",
       "npm:@preact/signals@^1.3.0",
-      "npm:preact@^10.23.2",
+      "npm:preact@^10.24.2",
       "npm:tailwindcss@3.4.3"
     ]
   }

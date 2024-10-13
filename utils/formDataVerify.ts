@@ -53,7 +53,8 @@ export function formDataVerify<T extends VerifyRecord>(
         error,
         data as {
             [K in keyof T]: T[K]["type"] extends "String" ? string
-                : T[K]["type"] extends "File" ? File : T[K]["type"] extends "Files" ? File[]
+                : T[K]["type"] extends "File" ? File
+                : T[K]["type"] extends "Files" ? File[]
                 : never;
         },
     ] as const;

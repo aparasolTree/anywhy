@@ -1,7 +1,7 @@
 import { getEnvVar, pipeline } from "../common.ts";
 import { createUser, createUserEntry, getUserFromEmail } from "./user.kv.ts";
 
-export const kv = await Deno.openKv("./anywhy.db");
+export const kv = await Deno.openKv();
 
 export async function createAdmin() {
     const adminEmailAddress = getEnvVar("ADMIN_EMAIL");

@@ -7,7 +7,7 @@ import { extname } from "@std/path";
 
 const client = new AliOss({
     region: getEnvVar("ALIYUN_REGOIN"),
-    bucket: getEnvVar("ALIYUN_BUCKET"),
+    bucket: "xlimages",
     authorizationV4: true,
     accessKeyId: getEnvVar("ALIYUN_ACCESS_KEY_ID"),
     accessKeySecret: getEnvVar("ALIYUN_ACCESS_KEY_SECRET"),

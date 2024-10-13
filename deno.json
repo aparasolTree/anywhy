@@ -39,6 +39,8 @@
         "@std/path": "jsr:@std/path@^1.0.4",
         "@std/streams": "jsr:@std/streams@^1.0.6",
         "@std/ulid": "jsr:@std/ulid@^1.0.0",
+        "esbuild": "npm:esbuild@^0.23.1",
+        "esbuild-wasm": "npm:esbuild-wasm@^0.23.1",
         "fresh": "jsr:@fresh/core@^2.0.0-alpha.20",
         "preact": "npm:preact@^10.23.2",
         "tailwindcss": "npm:tailwindcss@3.4.3",

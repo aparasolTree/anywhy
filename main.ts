@@ -11,7 +11,6 @@ app.use(staticFiles())
 await createAdmin();
 
 await fsRoutes(app, {
-    dir: "./",
     loadIsland: (path) => import(`./islands/${path}`),
     loadRoute: (path) => import(`./routes/${path}`),
 });

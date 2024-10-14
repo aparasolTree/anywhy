@@ -5,6 +5,7 @@ import {
     ANYWHY_KV_IMAGE_DOWNLOADS_KEY,
     ANYWHY_KV_IMAGE_ID_KEY,
     ANYWHY_KV_IMAGE_KEY,
+    ANYWHY_KV_IMAGE_NAME_KEY,
     ANYWHY_KV_IMAGE_TOTAL_KEY,
     ANYWHY_KV_IMAGE_VIEWS_KEY,
     ANYWHY_KV_KEY,
@@ -12,7 +13,6 @@ import {
 import { uuid } from "../cropty.ts";
 import { badRequest } from "../response.ts";
 import { ExifInfo, ImageEntry, Size } from "../type.ts";
-import { formatDate } from "../formatDate.ts";
 import { CsvParseStream } from "@std/csv";
 import { escape, unescape } from "../cookie/escape.ts";
 
@@ -31,21 +31,16 @@ export function createImageEntry(
 }
 
 export async function createImage(imageEntry: ImageEntry) {
-    const { id, createAt } = imageEntry;
+    const { id, name } = imageEntry;
     const ImageIdKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_ID_KEY, id];
     const ImageTotalKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_TOTAL_KEY];
-    const ImageCreateAtKey = [
-        ANYWHY_KV_KEY,
-        ANYWHY_KV_IMAGE_KEY,
-        ANYWHY_KV_IMAGE_CREATEAT_KEY,
-        createAt,
-    ];
+    const ImageNameKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_NAME_KEY, name];
 
     const { ok } = await kv.atomic()
         .check({ key: ImageIdKey, versionstamp: null })
-        .check({ key: ImageCreateAtKey, versionstamp: null })
+        .check({ key: ImageNameKey, versionstamp: null })
         .set(ImageIdKey, imageEntry)
-        .set(ImageCreateAtKey, id)
+        .set(ImageNameKey, id)
         .sum(ImageTotalKey, 1n)
         .commit();
 
@@ -151,34 +146,17 @@ export async function getImageEntries(
         total,
     };
 }
-type a = () => Promise<{ a: 0 }>;
-type b = Awaited<ReturnType<a>>;
-export async function getImageEntriesFromDate(
-    { page, limit }: { page: number; limit: number },
-) {
-    const ImageIdKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_CREATEAT_KEY];
-    const { data } = await list(ImageIdKey, {
-        reverse: true,
-        pipe: [
-            (entries) => entries.slice((page - 1) * limit, page * limit),
-        ],
-        map: async (id: string) => {
-            const entryData = await getImageEntry(id);
-            if (!entryData) throw new Error(`${id} 无效`);
-            return {
-                ...entryData,
-                views: await getImageViews(id),
-                downloads: await getImageDownloads(id),
-            };
-        },
-    });
 
-    return data.reduce((acc, imageEntry) => {
-        const date = formatDate(new Date(imageEntry.createAt), "YYYY/MM/DD");
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(imageEntry);
-        return acc;
-    }, {} as Record<string, ImageEntry[]>);
+export async function getImageEntryByName(name: string) {
+    const ImageNameKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_NAME_KEY, name];
+    const id = await getValue<string>(ImageNameKey);
+    if (!id) return null;
+    return await getValue<ImageEntry>([
+        ANYWHY_KV_KEY,
+        ANYWHY_KV_IMAGE_KEY,
+        ANYWHY_KV_IMAGE_ID_KEY,
+        id,
+    ]);
 }
 
 export async function deleteImages(imageEntryIds: string[]) {

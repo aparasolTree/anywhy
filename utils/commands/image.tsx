@@ -51,7 +51,7 @@ export const imageCommand = createCommandLineHandler("image", {
 
 // cache
 const fetchImageCacheData = async (reload: boolean) => {
-    const data = await fetcher<{ path: string; count: number; size: number }>("/admin/api/image-cache", { reload });
+    const data = await fetcher<{ total: number; size: number }>("/admin/api/image-cache", { reload });
     return data;
 };
 
@@ -69,7 +69,7 @@ imageCommand.add(({ cache, reload = false }) => {
                         value="idle"
                         content={data && (
                             <Table data={[data]}>
-                                <TableColumn dataKey="count" title="缓存数量" />
+                                <TableColumn dataKey="total" title="缓存总数" />
                                 <TableColumn
                                     dataKey="size"
                                     title="已使用空间"

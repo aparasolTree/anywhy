@@ -1,5 +1,6 @@
 import { define } from "../../../utils/define.ts";
 import { formDataVerify } from "../../../utils/formDataVerify.ts";
+import { imageCache } from "../../../utils/image-cache.ts";
 import { clearImageKvData } from "../../../utils/kv/image.kv.ts";
 import { createAdmin } from "../../../utils/kv/index.ts";
 import { clearUserKvData } from "../../../utils/kv/user.kv.ts";
@@ -20,9 +21,11 @@ export const handler = define.handlers({
                 await clearUserKvData();
                 await createAdmin();
                 await clearImageKvData();
+                await imageCache.clear();
                 break;
             case "image":
                 await clearImageKvData();
+                await imageCache.clear();
                 break;
             default:
                 return badRequest(`${clear}数据不存在`);

@@ -1,11 +1,14 @@
 import { extname } from "@std/path";
 import { monotonicUlid } from "@std/ulid";
 import { define } from "../../utils/define.ts";
-import { badRequest, redirect } from "../../utils/response.ts";
+import { badRequest, json } from "../../utils/response.ts";
 import { putFile } from "../../utils/image.ts";
 import { createImage, createImageEntry, readImageExif } from "../../utils/kv/image.kv.ts";
 import { formDataVerify } from "../../utils/formDataVerify.ts";
-// import { upload } from "../../utils/file_upload_local_test/upload.ts";
+import { upload } from "../../utils/file_upload_local_test/upload.ts";
+import { getEnvVar } from "../../utils/common.ts";
+
+const dev = getEnvVar("ANYWHY_DEV");
 
 export const handler = define.handlers({
     async POST({ req }) {
@@ -13,9 +16,9 @@ export const handler = define.handlers({
             images: { type: "Files", required: true, size: 700000, maxLength: 10, extname: [".jpg", ".jpeg"] },
         });
         if (error) return badRequest(error);
-
         for (const file of images) {
-            const res = await putFile(monotonicUlid() + extname(file.name), file);
+            const fileName = monotonicUlid() + extname(file.name);
+            const res = dev ? await upload(fileName, file) : await putFile(fileName, file);
             const name = res.name.split(/\\|\//).pop()!;
             const { exif, imageSize } = await readImageExif(await file.arrayBuffer());
             await createImage(createImageEntry({
@@ -25,6 +28,6 @@ export const handler = define.handlers({
                 ...imageSize,
             }));
         }
-        return redirect("/admin");
+        return json({ ok: true });
     },
 });

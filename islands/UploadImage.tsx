@@ -149,7 +149,7 @@ interface FileListBoxProps {
 }
 function FileListBox({ fileList, remove, ...methods }: FileListBoxProps) {
     return (
-        <div class="bg-white rounded-md shadow-md h-full w-[300px] p-4">
+        <div class="flex flex-col bg-white rounded-md shadow-md h-full w-[300px] p-4">
             <h2 class="text-2xl text-center">图片上传预览</h2>
             {!fileList.length
                 ? (
@@ -159,7 +159,7 @@ function FileListBox({ fileList, remove, ...methods }: FileListBoxProps) {
                     </div>
                 )
                 : (
-                    <div {...methods}>
+                    <div {...methods} class="flex-1 overflow-y-auto">
                         <FilePreview fileList={fileList} remove={remove} />
                     </div>
                 )}
@@ -257,20 +257,18 @@ interface FilePreviewProps {
 function FilePreview({ fileList, remove }: FilePreviewProps) {
     const { setActiveIndex } = useFormContext();
     return (
-        <div class="my-2 relative">
-            <ul class="max-h-[300px] overflow-y-auto">
-                {fileList.map((file, index) => {
-                    return (
-                        <FileItem
-                            key={file.name}
-                            file={file}
-                            removeFile={() => remove(index)}
-                            onMouseEnter={() => setActiveIndex(index)}
-                        />
-                    );
-                })}
-            </ul>
-        </div>
+        <ul class="my-2 relative">
+            {fileList.map((file, index) => {
+                return (
+                    <FileItem
+                        key={file.name}
+                        file={file}
+                        removeFile={() => remove(index)}
+                        onMouseEnter={() => setActiveIndex(index)}
+                    />
+                );
+            })}
+        </ul>
     );
 }
 

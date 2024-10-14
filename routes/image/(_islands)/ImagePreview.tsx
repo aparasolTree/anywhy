@@ -127,7 +127,7 @@ function Preview() {
         <div class="mt-4 w-[1000px] bg-white p-6 rounded-lg relative">
             <div class="absolute bottom-0 left-[105%] flex flex-col items-start gap-2">
                 <ShortcutKeyTip />
-                <ImageDownload id={id} name={name} downloads={downloads} />
+                <ImageDownload name={name} downloads={downloads} />
             </div>
             <ImageSize size={size} width={width} height={height} />
             <ImageExif exif={exif || {}} />
@@ -272,8 +272,8 @@ function ImageSize({ size, width, height }: { size: number; width: number; heigh
     );
 }
 
-function ImageDownload(props: { name: string; id: string; downloads?: number }) {
-    const { id, name, downloads = 0 } = props;
+function ImageDownload(props: { name: string; downloads?: number }) {
+    const { name, downloads = 0 } = props;
     const linkRef = useRef<HTMLAnchorElement>(null);
     const { atTop } = useModal();
     useShortcutKey("d", () => atTop && linkRef.current?.click());
@@ -281,7 +281,7 @@ function ImageDownload(props: { name: string; id: string; downloads?: number }) 
         <a
             title="下载图片 <d>"
             ref={linkRef}
-            href={`/image/${name}?action=downloads&id=${id}`}
+            href={`/image/${name}?action=downloads`}
             class="px-[6px] py-[3px] rounded-md bg-white flex items-center gap-2"
         >
             <span class="text-[#1C274C] text-[20px]">

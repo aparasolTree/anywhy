@@ -3,19 +3,15 @@ import { define } from "../utils/define.ts";
 import { Header } from "../components/Header.tsx";
 import { getLoginInfoSession } from "../utils/login.session.ts";
 import { Toast } from "../islands/Toast.ts";
-import { getImageEntries } from "../utils/kv/image.kv.ts";
 
 export const handler = define.handlers({
-    async GET({ req }) {
+    async GET({ req, state }) {
         const loginInfoSession = await getLoginInfoSession(req);
         const error = loginInfoSession.getError();
-        const { data } = await getImageEntries({
-            pipe: [
-                (entries) => entries.toSorted((a, b) => b.views - a.views),
-                (entries) => entries.slice(0, 6),
-            ],
-        });
-        return page({ error, data }, {
+        state.title = "xulealive";
+        state.description =
+            "欢迎来到我的摄影世界！每一张照片都是一段故事，记录着光影中的瞬间与情感。请随意探索我的作品集，感受镜头背后的精彩旅程。";
+        return page({ error }, {
             headers: await loginInfoSession.getHeaders(),
         });
     },

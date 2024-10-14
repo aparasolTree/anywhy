@@ -8,7 +8,7 @@ import { clamp, getErrorMessage, validateNumber } from "../../utils/common.ts";
 import { badRequest, json } from "../../utils/response.ts";
 
 export const handler = define.handlers({
-    async GET({ req, url }) {
+    async GET({ req, url, state }) {
         const isJOSN = req.headers.get("Content-Type") === "application/json";
         const { page: cursor = "1", limit = "8" } = Object.fromEntries(url.searchParams);
         try {
@@ -30,6 +30,8 @@ export const handler = define.handlers({
                 total: await getImageTotal(),
             };
 
+            state.title = "我的个人作品";
+            state.description = "个人的摄影作品，可在任何地方使用，免费下载，无需注明归属";
             return isJOSN ? json(result) : page(result);
         } catch (error) {
             return badRequest(getErrorMessage(error));

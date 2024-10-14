@@ -4,6 +4,9 @@ import { isObject } from "./common.ts";
 
 export interface State {
     user: User;
+    title: string;
+    description: string;
+    noIndex: boolean;
 }
 
 export const define: Define<State> = {

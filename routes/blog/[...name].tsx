@@ -16,13 +16,15 @@ import { BackSVG } from "../../components/svg/BackSVG.tsx";
 import { getBlogViews, setBlogViews } from "../../utils/kv/blog.kv.ts";
 
 export const handler = define.handlers({
-    async GET({ params }) {
+    async GET({ params, state }) {
         const readedFile = join(params.name, "/index.md");
         const { blogs } = await getBlogList();
         const exists = blogs.some(({ filename }) => filename === params.name);
         if (!exists) throw new HttpError(404);
         await setBlogViews(params.name);
         const { attrs, html } = await renderMarkdown(readedFile);
+        state.title = attrs.title;
+        state.description = attrs.description;
         return page({
             markdown: html,
             attrs,

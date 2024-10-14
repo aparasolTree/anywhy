@@ -7,14 +7,17 @@ import { define } from "../utils/define.ts";
 import { ModalManager } from "../islands/Modal.tsx";
 
 export default define.page(function App({ Component, state, url }) {
-    const isLogin = !!state.user;
-    const isAdmin = state.user?.role === "admin";
+    const { user, title, description, noIndex = false } = state;
+    const isAdmin = user?.role === "admin";
+    const isLogin = !!user;
     return (
         <html>
             <head>
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>anywhy</title>
+                {title ? <title>{title}</title> : null}
+                {description ? <meta name="description" content={description} /> : null}
+                {noIndex ? <meta name="robots" content="noindex" /> : null}
                 <link rel="stylesheet" href="/styles.css" />
                 {url.pathname.startsWith("/blog") && (
                     <>

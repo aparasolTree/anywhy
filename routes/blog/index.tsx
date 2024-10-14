@@ -7,7 +7,9 @@ import { CopyButton } from "../../islands/CopyButton.tsx";
 import { Tags } from "../../components/Tags.tsx";
 
 export const handler = define.handlers({
-    async GET() {
+    async GET({ state }) {
+        state.title = "我的编程博客";
+        state.description = "在这里你可以找到有趣的 JavaScript 示例，助你更好地应用编程。";
         return page(await getBlogList());
     },
 });

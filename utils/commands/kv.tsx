@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
 import { CommandRecord } from "../../components/CommandRecord.tsx";
@@ -12,6 +12,7 @@ import { allowClearCommands } from "../common.ts";
 import { useDownload } from "../../hooks/useDownload.ts";
 import { JSX } from "preact";
 import { useSetState } from "../../hooks/useSetState.ts";
+import { useMountedClick } from "../../hooks/useMountedClick.ts";
 
 export const kvCommand = createCommandLineHandler("kv", {
     conflictRecord: { clear: ["csv", "upload", "download"], csv: ["upload"], upload: ["download"] },
@@ -113,14 +114,6 @@ function DownloadCSV({ csv }: { csv: string }) {
 }
 
 // kv --upload <image | user>
-function useMountedClick<E extends HTMLElement>() {
-    const ref = useRef<E>(null);
-    useEffect(() => {
-        if (ref.current) ref.current.click();
-    }, []);
-    return ref;
-}
-
 kvCommand.add(({ upload }) => {
     if (!upload) return null;
     const allowUplaod = ["user", "image"].includes(upload);

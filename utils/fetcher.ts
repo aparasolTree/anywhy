@@ -12,7 +12,7 @@ export async function fetcher<T>(
         throw new Error(`${response.status}: (${await response.text()})`);
     }
     const data = await response.json();
-    cacheMap.set(input, data);
+    init.method?.toLowerCase() === "get" && cacheMap.set(input, data);
     return data as T;
 }
 export function createTimeoutSignal(timeout: number) {

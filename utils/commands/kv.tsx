@@ -68,11 +68,7 @@ kvCommand.add(({ download, csv = "" }) => {
     return ({ command }) => {
         return (
             <CommandRecord command={command}>
-                {!csv.length
-                    ? <div>参数csv不能为空</div>
-                    : allowDownload
-                    ? <DownloadCSV csv={csv} />
-                    : <CommandLineError errorMessage={`${csv} 无法识别`} />}
+                {!csv.length ? <div>参数csv不能为空</div> : allowDownload ? <DownloadCSV csv={csv} /> : <CommandLineError errorMessage={`${csv} 无法识别`} />}
             </CommandRecord>
         );
     };
@@ -130,9 +126,7 @@ kvCommand.add(({ upload }) => {
 
         return (
             <CommandRecord command={command}>
-                {!state.file && allowUplaod
-                    ? <input accept=".csv" type="file" class="hidden" onChange={onChange} ref={ref} />
-                    : null}
+                {!state.file && allowUplaod ? <input accept=".csv" type="file" class="hidden" onChange={onChange} ref={ref} /> : null}
                 {state.file
                     ? (
                         <KVCSVDataUpload

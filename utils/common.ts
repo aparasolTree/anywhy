@@ -90,7 +90,7 @@ export const validateNumber = (value: string, paramName: string) => {
     return num;
 };
 
-export function pick<T extends Record<string, unknown>, K extends (keyof T)>(obj: T, keys: K[]) {
+export function pick<T extends object, K extends (keyof T)>(obj: T, keys: K[]) {
     if (keys.length === 0) return obj;
     const errorKey = keys.find((k) => !Object.hasOwn(obj, k));
     if (errorKey) throw new Error(`${String(errorKey)} 不是传入对象的key`);

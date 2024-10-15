@@ -15,6 +15,7 @@ import { badRequest } from "../response.ts";
 import { ExifInfo, ImageEntry, Size } from "../type.ts";
 import { CsvParseStream } from "@std/csv";
 import { escape, unescape } from "../cookie/escape.ts";
+import { getCacheByKvKey } from "../kv-cache.ts";
 
 export function createImageEntry(
     { name, exif, height, width, size }: Pick<ImageEntry, "exif" | "height" | "name" | "size" | "width">,
@@ -132,18 +133,24 @@ export async function getImageEntries(
     },
 ) {
     const ImageIdKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_ID_KEY];
-    const { data, total } = await list(ImageIdKey, {
-        pipe,
-        filter,
-        map: async (imgEntry) => ({
-            ...imgEntry,
-            views: await getImageViews(imgEntry.id),
-            downloads: await getImageDownloads(imgEntry.id),
-        }),
-    });
+    let imageEntries = getCacheByKvKey<ImageEntry[]>(ImageEntryKey);
+    let cachedTotal = imageEntries?.length || 0;
+    if (!imageEntries) {
+        const { data, total } = await list(ImageIdKey, {
+            pipe,
+            filter,
+            map: async (imgEntry) => ({
+                ...imgEntry,
+                views: await getImageViews(imgEntry.id),
+                downloads: await getImageDownloads(imgEntry.id),
+            }),
+        });
+        imageEntries = data;
+        cachedTotal = total;
+    }
     return {
-        data,
-        total,
+        data: imageEntries,
+        total: cachedTotal,
     };
 }
 

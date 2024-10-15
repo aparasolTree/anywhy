@@ -51,6 +51,10 @@ const getRaw = (value: unknown) => toString(value).slice(8, -1).toLowerCase();
 // deno-lint-ignore ban-types
 export const isFunction = (val: unknown): val is Function => getRaw(val) === "function";
 export const isString = (val: unknown): val is string => getRaw(val) === "string";
+export const isNumber = (val: unknown): val is number => getRaw(val) === "number";
+export const isBoolean = (val: unknown): val is number => getRaw(val) === "boolean";
+export const isBigInt = (val: unknown): val is number => getRaw(val) === "bigint";
+export const isSymbol = (val: unknown): val is number => getRaw(val) === "symbol";
 export const isFile = (val: unknown): val is File => getRaw(val) === "file";
 export const isArray = Array.isArray;
 // deno-lint-ignore no-explicit-any

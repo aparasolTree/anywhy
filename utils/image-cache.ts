@@ -1,16 +1,9 @@
-import { FreshContext } from "fresh";
 import { concat } from "@std/bytes/concat";
 import { assert, bytesConversion } from "./common.ts";
 import { getValues, kv } from "./kv/index.ts";
 
 const CACHE_MAX_SIZE = 100 * 1024 * 1024;
 const MAX_BYTES = 65536;
-
-interface Options {
-    maxAge: number;
-    path: string;
-    get: (ctx: FreshContext) => Promise<Response> | Response;
-}
 
 const CACHE_KEY = "CACHE_KEY";
 const CACHE_HEADER_KEY = "CACHE_HEADER_KEY";

@@ -5,11 +5,9 @@ import { useShortcutKey } from "../hooks/useShortcutKey.ts";
 import { useToggleState } from "../hooks/useToggle.ts";
 import { Modal } from "./Modal.tsx";
 import { isFunction } from "../utils/common.ts";
-import { checkImageEvent, CommandDisplayPanel, togglePanelEvent } from "../utils/commandLineEvent.ts";
-import { UploadImage } from "./UploadImage.tsx";
+import { checkImageEvent } from "../utils/commandLineEvent.ts";
 import { useScrollToLastElementChild } from "../hooks/useScrollToLastElementChild.ts";
 import { useInputFocus } from "../hooks/useInputFocus.ts";
-import { Case, Switch } from "./Switch.tsx";
 import { imageCommand } from "../utils/commands/image.tsx";
 import { accessCommand } from "../utils/commands/access.tsx";
 import { uploadCommand } from "../utils/commands/upload.tsx";
@@ -25,25 +23,13 @@ import { userCommand } from "../utils/commands/user.tsx";
 import { toast } from "../utils/toast/index.ts";
 
 export function CommandLine() {
-    const [displayPanel, setDisplayPanel] = useState<CommandDisplayPanel>("commandLine");
     const [show, { toggle }] = useToggleState();
-    const reset = useCallback(() => (toggle(false), setDisplayPanel("commandLine")), []);
-    useShortcutKey("p", () => {
-        setDisplayPanel("commandLine");
-        (displayPanel === "commandLine") && toggle();
-    }, { modifier: "ctrl", eventName: "keydown" });
-    useEffect(() => {
-        return togglePanelEvent.add((state) => {
-            setDisplayPanel(state);
-        });
-    }, []);
+    const reset = useCallback(() => toggle(false), []);
+    useShortcutKey("p", () => toggle, { modifier: "ctrl", eventName: "keydown" });
     return (
         <Modal direction="top" show={show} onClose={reset} class="mt-20 w-[75vw]">
             <ImageView />
-            <Switch when={displayPanel} animation>
-                <Case value="commandLine" keepAlive={true} content={<CommandLineInput />} />
-                <Case value="upload" content={<UploadImage />} />
-            </Switch>
+            <CommandLineInput />
         </Modal>
     );
 }

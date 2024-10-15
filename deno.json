@@ -10,7 +10,7 @@
         "fake": "deno run --unstable-kv -A ./tasks/fake.ts"
     },
     "lint": { "rules": { "tags": ["fresh", "recommended"] } },
-    "fmt": { "indentWidth": 4, "lineWidth": 120 },
+    "fmt": { "indentWidth": 4, "lineWidth": 160 },
     "exclude": ["**/_fresh/*"],
     "imports": {
         "@deno/gfm": "jsr:@deno/gfm@^0.9.0",

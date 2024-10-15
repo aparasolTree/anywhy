@@ -39,7 +39,7 @@ export function Table<T extends Record<string, any>>({ data, children }: TablePr
                             {head.map((key) => {
                                 return (
                                     <td class="px-4 py-2">
-                                        {configs[key]?.render?.(entry[key]) || entry[key]}
+                                        {configs[key]?.render?.(typeof entry[key] === "undefined" ? entry : entry[key]) || entry[key]}
                                     </td>
                                 );
                             })}

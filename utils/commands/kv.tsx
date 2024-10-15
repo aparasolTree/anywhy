@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
 import { CommandRecord } from "../../components/CommandRecord.tsx";
@@ -12,6 +12,7 @@ import { allowClearCommands } from "../common.ts";
 import { useDownload } from "../../hooks/useDownload.ts";
 import { JSX } from "preact";
 import { useSetState } from "../../hooks/useSetState.ts";
+import { useMountedClick } from "../../hooks/useMountedClick.ts";
 
 export const kvCommand = createCommandLineHandler("kv", {
     conflictRecord: { clear: ["csv", "upload", "download"], csv: ["upload"], upload: ["download"] },
@@ -67,11 +68,7 @@ kvCommand.add(({ download, csv = "" }) => {
     return ({ command }) => {
         return (
             <CommandRecord command={command}>
-                {!csv.length
-                    ? <div>参数csv不能为空</div>
-                    : allowDownload
-                    ? <DownloadCSV csv={csv} />
-                    : <CommandLineError errorMessage={`${csv} 无法识别`} />}
+                {!csv.length ? <div>参数csv不能为空</div> : allowDownload ? <DownloadCSV csv={csv} /> : <CommandLineError errorMessage={`${csv} 无法识别`} />}
             </CommandRecord>
         );
     };
@@ -113,13 +110,6 @@ function DownloadCSV({ csv }: { csv: string }) {
 }
 
 // kv --upload <image | user>
-function useMountedClick<E extends HTMLElement>() {
-    const ref = useRef<E>(null);
-    useEffect(() => {
-        if (ref.current) ref.current.click();
-    }, []);
-    return ref;
-}
 
 kvCommand.add(({ upload }) => {
     if (!upload) return null;
@@ -137,9 +127,7 @@ kvCommand.add(({ upload }) => {
 
         return (
             <CommandRecord command={command}>
-                {!state.file && allowUplaod
-                    ? <input accept=".csv" type="file" class="hidden" onChange={onChange} ref={ref} />
-                    : null}
+                {!state.file && allowUplaod ? <input accept=".csv" type="file" class="hidden" onChange={onChange} ref={ref} /> : null}
                 {state.file
                     ? (
                         <KVCSVDataUpload

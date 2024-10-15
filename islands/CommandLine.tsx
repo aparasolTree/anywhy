@@ -25,7 +25,7 @@ import { toast } from "../utils/toast/index.ts";
 export function CommandLine() {
     const [show, { toggle }] = useToggleState();
     const reset = useCallback(() => toggle(false), []);
-    useShortcutKey("p", () => toggle, { modifier: "ctrl", eventName: "keydown" });
+    useShortcutKey("p", () => toggle(), { modifier: "ctrl", eventName: "keydown" });
     return (
         <Modal direction="top" show={show} onClose={reset} class="mt-20 w-[75vw]">
             <ImageView />

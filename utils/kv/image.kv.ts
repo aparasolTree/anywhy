@@ -126,31 +126,24 @@ export async function getImageEntry(id: string) {
     return await getValue<ImageEntry>(ImageIdKey);
 }
 
-export async function getImageEntries(
-    { filter, pipe }: {
-        filter?: (val: ImageEntry) => boolean;
-        pipe?: ((val: ImageEntry[]) => ImageEntry[])[];
-    },
-) {
+export async function getImageEntries({ pipe, filter }: {
+    filter?: (entry: ImageEntry) => boolean;
+    pipe?: ((val: ImageEntry[]) => ImageEntry[])[];
+}) {
     const ImageIdKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_ID_KEY];
-    let imageEntries = getCacheByKvKey<ImageEntry[]>(ImageEntryKey);
-    let cachedTotal = imageEntries?.length || 0;
-    if (!imageEntries) {
-        const { data, total } = await list(ImageIdKey, {
-            pipe,
-            filter,
-            map: async (imgEntry) => ({
-                ...imgEntry,
-                views: await getImageViews(imgEntry.id),
-                downloads: await getImageDownloads(imgEntry.id),
-            }),
-        });
-        imageEntries = data;
-        cachedTotal = total;
-    }
+    const { data, total } = await list(ImageIdKey, {
+        pipe,
+        filter,
+        map: async (imgEntry) => ({
+            ...imgEntry,
+            views: await getImageViews(imgEntry.id),
+            downloads: await getImageDownloads(imgEntry.id),
+        }),
+    });
+
     return {
-        data: imageEntries,
-        total: cachedTotal,
+        data,
+        total,
     };
 }
 

@@ -120,15 +120,9 @@ export async function getUserCSV() {
     };
 }
 
-export async function getUsers(
-    { filter = () => true, pipe }: { filter?: (user: User) => boolean; pipe: ((users: User[]) => User[])[] },
-) {
+export async function getUsers({ pipe }: { pipe: ((users: User[]) => User[])[] }) {
     const UserIdKey = [ANYWHY_KV_KEY, ANYWHY_KV_USER_KEY, ANYWHY_KV_USER_ID_KEY];
-    const { data, total } = await list<User>(UserIdKey, {
-        filter,
-        pipe,
-    });
-
+    const { data, total } = await list<User>(UserIdKey, { pipe });
     return {
         data,
         total,

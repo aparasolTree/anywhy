@@ -19,7 +19,9 @@ export const handler = define.handlers({
             const end = isJOSN ? pageNum * limitNum : limitNum;
 
             const { data: imageEntries, total } = await getImageEntries({
-                pipe: [(entries) => entries.slice(start, end)],
+                pipe: [
+                    (entries) => entries.slice(start, end),
+                ],
             });
 
             const result = {

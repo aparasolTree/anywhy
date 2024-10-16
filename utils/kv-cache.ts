@@ -1,23 +1,27 @@
 import { isBigInt, isBoolean, isNumber, isString, isSymbol } from "./common.ts";
+import { ImageEntry } from "./type.ts";
 
-const kvCache: Map<Deno.KvKey, unknown> = new Map();
-
-export const clearCache = () => kvCache.clear();
-export function getCacheByKvKey<T>(key: Deno.KvKey) {
-    const keys = Array.from(kvCache.keys());
-    const keysLength = keys.length;
-    for (let i = 0; i < keysLength; i++) {
-        if (compareDenoKvKey(keys[i], key)) {
-            return kvCache.get(keys[i]) as T;
-        }
-    }
-    return null;
+const kvCache = new Map<string, Map<Deno.KvKey, unknown>>();
+export function createKvCache<T>(id: string) {
+    let cachedMap = kvCache.get(id);
+    if (!cachedMap) kvCache.set(id, cachedMap = new Map());
+    return {
+        clear: () => (cachedMap.clear(), kvCache.delete(id)),
+        set: (key: Deno.KvKey, value: T) => (cachedMap.set(key, value), value),
+        get: (key: Deno.KvKey) => {
+            const keys = Array.from(cachedMap.keys());
+            const keysLength = keys.length;
+            for (let i = 0; i < keysLength; i++) {
+                if (compareDenoKvKey(keys[i], key)) {
+                    return cachedMap.get(keys[i]) as T;
+                }
+            }
+            return null;
+        },
+    };
 }
 
-export function setCacheByKvKey<T>(key: Deno.KvKey, value: T) {
-    kvCache.set(key, value);
-    return value;
-}
+export const imageKvCache = createKvCache<ImageEntry[]>("image");
 
 function compareDenoKvKey(key1: Deno.KvKey, key2: Deno.KvKey) {
     if (key1.length !== key2.length) return false;

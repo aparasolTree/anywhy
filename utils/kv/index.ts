@@ -1,5 +1,5 @@
 import { getEnvVar, pipeline } from "../common.ts";
-import { getCacheByKvKey, setCacheByKvKey } from "../kv-cache.ts";
+import { createKvCache } from "../kv-cache.ts";
 import { createUser, createUserEntry, getUserFromEmail } from "./user.kv.ts";
 
 export const kv = await Deno.openKv();
@@ -34,24 +34,38 @@ export async function getValues<T extends any[]>(keys: { [K in keyof T]: Deno.Kv
 }
 
 export interface ListOptions<A, R> extends Deno.KvListOptions {
+    cache?: ReturnType<typeof createKvCache<A[]>>;
     map?: (arg: A) => Promise<R> | R | A;
     filter?: (entry: R) => boolean;
     pipe?: ((val: R[]) => R[])[];
+}
+
+async function getKvListValues<T>(prefix: Deno.KvKey, options: Deno.KvListOptions) {
+    const result: T[] = [];
+    const entryList = kv.list<T>({ prefix }, options);
+    for await (const { value } of entryList) {
+        result.push(value);
+    }
+    return result;
 }
 
 export async function list<R, A = R>(
     prefix: Deno.KvKey,
     options: ListOptions<A, R>,
 ) {
-    const { map = (v) => v, filter = () => true, pipe = [], ...other } = options;
-    const imageEntries: A[] = getCacheByKvKey(prefix) || [];
-    if (!imageEntries.length) {
-        const entryList = kv.list<A>({ prefix }, other);
-        for await (const { value } of entryList) {
-            imageEntries.push(value);
+    const { map = (v) => v, filter = () => true, pipe = [], cache, ...other } = options;
+    let imageEntries: A[] | null;
+
+    if (cache) {
+        imageEntries = cache.get(prefix);
+        if (!imageEntries) {
+            imageEntries = await getKvListValues<A>(prefix, other);
+            cache.set(prefix, imageEntries);
         }
-        setCacheByKvKey(prefix, imageEntries);
+    } else {
+        imageEntries = await getKvListValues<A>(prefix, other);
     }
+
     const data = await Promise.all(imageEntries.map(map)) as R[];
     const result = data.filter(filter);
     return {

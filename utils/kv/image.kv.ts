@@ -15,7 +15,7 @@ import { badRequest } from "../response.ts";
 import { ExifInfo, ImageEntry, Size } from "../type.ts";
 import { CsvParseStream } from "@std/csv";
 import { escape, unescape } from "../cookie/escape.ts";
-import { getCacheByKvKey } from "../kv-cache.ts";
+import { imageKvCache } from "../kv-cache.ts";
 
 export function createImageEntry(
     { name, exif, height, width, size }: Pick<ImageEntry, "exif" | "height" | "name" | "size" | "width">,
@@ -45,7 +45,8 @@ export async function createImage(imageEntry: ImageEntry) {
         .sum(ImageTotalKey, 1n)
         .commit();
 
-    if (!ok) {
+    if (ok) imageKvCache.clear();
+    else {
         throw badRequest("图片数据可能已存在" + imageEntry.id);
     }
 }
@@ -132,6 +133,7 @@ export async function getImageEntries({ pipe, filter }: {
 }) {
     const ImageIdKey = [ANYWHY_KV_KEY, ANYWHY_KV_IMAGE_KEY, ANYWHY_KV_IMAGE_ID_KEY];
     const { data, total } = await list(ImageIdKey, {
+        cache: imageKvCache,
         pipe,
         filter,
         map: async (imgEntry) => ({
@@ -193,8 +195,8 @@ export async function deleteImages(imageEntryIds: string[]) {
         new Deno.KvU64(imageTotal.value - deleteImageEntryNum),
     );
     const { ok } = await deleteAtomic.commit();
-
-    if (!ok) {
+    if (ok) imageKvCache.clear();
+    else {
         throw badRequest("无法通过给予的 imageEntryIds 删除图片");
     }
 }

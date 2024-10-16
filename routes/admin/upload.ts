@@ -13,7 +13,7 @@ const dev = getEnvVar("ANYWHY_DEV");
 export const handler = define.handlers({
     async POST({ req }) {
         const [error, { images }] = formDataVerify(await req.formData(), {
-            images: { type: "Files", required: true, size: 700000, maxLength: 10, extname: [".jpg", ".jpeg"] },
+            images: { type: "Files", required: true, size: 1024 * 1024, maxLength: 6, extname: [".jpg", ".jpeg"] },
         });
         if (error) return badRequest(error);
         for (const file of images) {

@@ -1,7 +1,7 @@
 import { extname } from "@std/path/extname";
 import { define } from "../../utils/define.ts";
 import { getImageEntryByName, setImageDownloads } from "../../utils/kv/image.kv.ts";
-import { imageCache } from "../../utils/image-cache.ts";
+import { imageDataCache } from "../../utils/image-data-cache.ts";
 import { HttpError } from "fresh";
 import { getUserSession } from "../../utils/user.session.ts";
 import { isProhibited, remoteAddreeAccessRestrict } from "../../utils/kv/access.kv.ts";
@@ -24,11 +24,9 @@ export const handler = define.handlers(async ({ params, url, req, info }) => {
     }
     await remoteAddreeAccessRestrict(address);
 
-    const has = await imageCache.has(req);
-    const response = !has
-        ? dev ? await getFile(params.name) : await getImage(params.name)
-        : (await imageCache.get(req))!;
-    if (!has) await imageCache.set(req, response.clone());
+    const has = await imageDataCache.has(req);
+    const response = !has ? dev ? await getFile(params.name) : await getImage(params.name) : (await imageDataCache.get(req))!;
+    if (!has) await imageDataCache.set(req, response.clone());
 
     const { action } = Object.fromEntries(url.searchParams);
     if (action === "downloads") {

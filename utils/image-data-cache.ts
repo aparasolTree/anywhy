@@ -12,9 +12,7 @@ const CACHE_URL_KEY = "CACHE_URL_KEY";
 const CACHE_TOTAL_KEY = "CACHE_TOTAL_KEY";
 const CACHE_SIZE_KEY = "CACHE_SIZE_KEY";
 
-function createImageCache(
-    { expireIn = 1000 * 60 * 60 * 24 }: { expireIn?: number } = {},
-) {
+function createImageDataCache() {
     const HEADER_KEY = [CACHE_KEY, CACHE_HEADER_KEY];
     const DATA_KEY = [CACHE_KEY, CACHE_DATA_KEY];
     const URL_KEY = [CACHE_KEY, CACHE_URL_KEY];
@@ -30,7 +28,6 @@ function createImageCache(
             await kv.atomic().set(
                 [...DATA_KEY, request.url, i],
                 value.slice(i * MAX_BYTES, (i + 1) * MAX_BYTES),
-                { expireIn },
             ).commit();
         }
     }
@@ -49,20 +46,9 @@ function createImageCache(
         return new Headers(value || []);
     }
 
-    const assertSaveSpace = async () => {
-        const [size] = await getCachedInfo();
-        const sizeNum = Number(size);
-        assert(
-            sizeNum <= CACHE_MAX_SIZE,
-            `存储空间已满，当前大小${bytesConversion(sizeNum)}，最大空间：${bytesConversion(CACHE_MAX_SIZE)}`,
-        );
-    };
     return {
         getCachedInfo,
-        has: async (request: Request) => {
-            request = ignoreSearchParams(request);
-            return !!(await kv.get([...URL_KEY, request.url])).value;
-        },
+        has: async (request: Request) => (await kv.get<boolean>([...URL_KEY, ignoreSearchParams(request).url])).value,
         get: async (request: Request) => {
             request = ignoreSearchParams(request);
             const headers = await getHeaders(request);
@@ -73,14 +59,15 @@ function createImageCache(
             });
         },
         set: async (request: Request, response: Response) => {
-            assertSaveSpace();
+            const [size] = await getCachedInfo();
+            if (Number(size) > CACHE_MAX_SIZE) return;
             request = ignoreSearchParams(request);
             const headers = [...response.headers.entries()];
             const data = new Uint8Array(await response.arrayBuffer());
             await sliceCache(request, data);
             await kv.atomic()
-                .set([...HEADER_KEY, request.url], headers, { expireIn })
-                .set([...URL_KEY, request.url], true, { expireIn })
+                .set([...HEADER_KEY, request.url], headers)
+                .set([...URL_KEY, request.url], true)
                 .sum(TOTAL_KEY, 1n)
                 .sum(SIZE_KEY, BigInt(data.length))
                 .commit();
@@ -105,4 +92,4 @@ function ignoreSearchParams(request: Request) {
     } as Request;
 }
 
-export const imageCache = createImageCache();
+export const imageDataCache = createImageDataCache();

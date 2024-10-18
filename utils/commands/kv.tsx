@@ -15,8 +15,8 @@ import { useSetState } from "../../hooks/useSetState.ts";
 import { useMountedClick } from "../../hooks/useMountedClick.ts";
 
 export const kvCommand = createCommandLineHandler("kv", {
-    conflictRecord: { clear: ["csv", "upload", "download"], csv: ["upload"], upload: ["download"] },
-    parse: (args) => parseArgs(args, { string: ["clear", "csv", "upload"], boolean: ["download"] }),
+    conflictRecord: { clear: ["upload", "download"], upload: ["download"] },
+    parse: (args) => parseArgs(args, { string: ["clear", "upload", "download"] }),
 });
 
 // kv --clear <user | image>
@@ -61,14 +61,14 @@ export function KvClear({ clear }: { clear: string }) {
     );
 }
 
-// kv --download --csv <image | user>
-kvCommand.add(({ download, csv = "" }) => {
+// kv --download <image | user>
+kvCommand.add(({ download }) => {
     if (!download) return null;
-    const allowDownload = ["image", "user"].includes(csv);
+    const allowDownload = ["image", "user"].includes(download);
     return ({ command }) => {
         return (
             <CommandRecord command={command}>
-                {!csv.length ? <div>参数csv不能为空</div> : allowDownload ? <DownloadCSV csv={csv} /> : <CommandLineError errorMessage={`${csv} 无法识别`} />}
+                {allowDownload ? <DownloadCSV csv={download} /> : <CommandLineError errorMessage={`${download} 无法识别`} />}
             </CommandRecord>
         );
     };

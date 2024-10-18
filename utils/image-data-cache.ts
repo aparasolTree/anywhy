@@ -1,8 +1,7 @@
 import { concat } from "@std/bytes/concat";
-import { assert, bytesConversion } from "./common.ts";
 import { getValues, kv } from "./kv/index.ts";
 
-const CACHE_MAX_SIZE = 100 * 1024 * 1024;
+const CACHE_MAX_SPACE = 100 * 1024 * 1024;
 const MAX_BYTES = 65536;
 
 const CACHE_KEY = "CACHE_KEY";
@@ -11,6 +10,18 @@ const CACHE_DATA_KEY = "CACHE_DATA_KEY";
 const CACHE_URL_KEY = "CACHE_URL_KEY";
 const CACHE_TOTAL_KEY = "CACHE_TOTAL_KEY";
 const CACHE_SIZE_KEY = "CACHE_SIZE_KEY";
+
+export const CACHE_SPACE_KEY = "image_data_cache_space";
+export const getImageDataCacheSpace = () => {
+    const space = localStorage.getItem(CACHE_SPACE_KEY);
+    return space ? Number(space) : CACHE_MAX_SPACE;
+};
+export const setImageDataCacheSpace = (space: number) => {
+    const newSpace = (space * 1024 * 1024) + getImageDataCacheSpace();
+    if (newSpace >= 0) {
+        localStorage.setItem(CACHE_SPACE_KEY, String(newSpace));
+    }
+};
 
 function createImageDataCache() {
     const HEADER_KEY = [CACHE_KEY, CACHE_HEADER_KEY];
@@ -60,7 +71,8 @@ function createImageDataCache() {
         },
         set: async (request: Request, response: Response) => {
             const [size] = await getCachedInfo();
-            if (Number(size) > CACHE_MAX_SIZE) return;
+            const space = getImageDataCacheSpace();
+            if (space === 0 || Number(size) > space) return;
             request = ignoreSearchParams(request);
             const headers = [...response.headers.entries()];
             const data = new Uint8Array(await response.arrayBuffer());

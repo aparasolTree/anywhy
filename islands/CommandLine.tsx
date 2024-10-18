@@ -165,9 +165,10 @@ const commandTip = {
     access: ["access [--year <string>]"],
     blog: ["blog --list"],
     user: ["user --list [-p/--page <number>] [-l/--limit <number>]"],
-    kv: ["kv --clear <all | image | user>", "kv --download --csv <image | user>", "kv --upload <image | user>"],
+    kv: ["kv --clear <all | image | user>", "kv --download <image | user>", "kv --upload <image | user>"],
     image: [
         "image --cache [--reload]",
+        "image --cache --space <number>",
         "image --remove --id <string>",
         "image --list [-f/--filter <string>] [-p/--page <number>] [-l/--limit <number>] [-o/--order <string>] [-s/--sort <string>] [-k/--pick <string>] [--reload]",
     ],

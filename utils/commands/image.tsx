@@ -18,21 +18,22 @@ import { RequestConfirm } from "../../islands/RequestConfirm.tsx";
 
 export const imageCommand = createCommandLineHandler("image", {
     conflictRecord: {
-        remove: ["help", "cache", "reload"],
-        list: ["remove", "help", "cache"],
+        remove: ["help", "cache", "reload", "space"],
+        list: ["remove", "help", "cache", "space"],
         cache: ["help"],
 
-        page: ["remove", "help", "cache"],
-        limit: ["remove", "help", "cache"],
-        pick: ["remove", "help", "cache"],
-        order: ["remove", "help", "cache"],
-        sort: ["remove", "help", "cache"],
-        filter: ["remove", "help", "cache"],
-        id: ["help", "list", "cache", "page", "limit", "pick", "order", "sort", "reload", "filter"],
+        space: ["reload"],
+        page: ["remove", "help", "cache", "space"],
+        limit: ["remove", "help", "cache", "space"],
+        pick: ["remove", "help", "cache", "space"],
+        order: ["remove", "help", "cache", "space"],
+        sort: ["remove", "help", "cache", "space"],
+        filter: ["remove", "help", "cache", "space"],
+        id: ["help", "list", "cache", "page", "limit", "pick", "order", "sort", "reload", "filter", "space"],
     },
     parse: (args) =>
         parseArgs(args, {
-            string: ["id", "page", "limit", "pick", "order", "sort", "filter"],
+            string: ["id", "page", "limit", "pick", "order", "sort", "filter", "space"],
             boolean: ["remove", "help", "list", "cache", "reload"],
             alias: {
                 pick: "k",
@@ -51,12 +52,12 @@ export const imageCommand = createCommandLineHandler("image", {
 
 // cache
 const fetchImageCacheData = async (reload: boolean) => {
-    const data = await fetcher<{ total: number; size: number }>("/admin/api/image-cache", { reload });
+    const data = await fetcher<{ total: number; size: number; space: number }>("/admin/api/image/cache", { reload });
     return data;
 };
 
-imageCommand.add(({ cache, reload = false }) => {
-    if (!cache) return null;
+imageCommand.add(({ cache, space, reload = false }) => {
+    if (!cache || space) return null;
     const imageCacheData = fetchImageCacheData(reload);
     return ({ command }) => {
         const { data, status, msg } = usePromise(imageCacheData, []);
@@ -70,11 +71,8 @@ imageCommand.add(({ cache, reload = false }) => {
                         content={data && (
                             <Table data={[data]}>
                                 <TableColumn dataKey="total" title="缓存总数" />
-                                <TableColumn
-                                    dataKey="size"
-                                    title="已使用空间"
-                                    render={(val) => `${bytesConversion(val)} / 100MB`}
-                                />
+                                <TableColumn dataKey="size" title="已使用空间" render={(val) => `${bytesConversion(val)}`} />
+                                <TableColumn dataKey="space" title="总空间" render={(val) => `${bytesConversion(val)}`} />
                             </Table>
                         )}
                     />
@@ -83,6 +81,45 @@ imageCommand.add(({ cache, reload = false }) => {
         );
     };
 });
+
+function setImageDataCachedSpace(space: string) {
+    const formData = new FormData();
+    formData.append("space", String(space));
+    return fetcher("/admin/api/image/cache", {
+        method: "POST",
+        body: formData,
+    });
+}
+
+const cacheSpaceReg = /^((-|\+)(\d+))$/;
+imageCommand.add(({ cache, space }) => {
+    if (!cache || !space) return null;
+    console.log(space.replaceAll(removeQuoteReg, ""));
+    const formattedSpace = space.replaceAll(removeQuoteReg, "$2");
+    const pattern = cacheSpaceReg.test(formattedSpace);
+    return ({ command }) => {
+        return (
+            <CommandRecord command={command}>
+                {pattern ? <SetCacheSpace space={formattedSpace} /> : (
+                    <div>
+                        <span class="text-red-500">{formattedSpace}</span> ：格式错误
+                    </div>
+                )}
+            </CommandRecord>
+        );
+    };
+});
+
+function SetCacheSpace({ space }: { space: string }) {
+    const { data, status, msg } = usePromise(() => setImageDataCachedSpace(space), [space]);
+    return (
+        <Switch when={status}>
+            <Case value="error" content={<CommandLineError errorMessage={msg} />} />
+            <Case value="loading" content={<CommandLineLoading tip="正在修改图片数据缓存空间" />} />
+            <Case value="idle" content={data ? <div>修改成功</div> : null} />
+        </Switch>
+    );
+}
 
 // remove image
 function requestRemoveImage(id: string) {
@@ -194,8 +231,8 @@ imageCommand.add((args) => {
                             (!data.imageEntries?.length ? <p>查询数据为空</p> : (
                                 <>
                                     <div class="mb-4">
-                                        查询到的数据共{data.total}条 共{Math.ceil(data.total / Number(limit))}页
-                                        当前第{data.page}页 {data.imageEntries.length}条
+                                        查询到的数据共{data.total}条 共{Math.ceil(data.total / Number(limit))}页 当前第{data.page}页{" "}
+                                        {data.imageEntries.length}条
                                     </div>
                                     <Table data={data.imageEntries}>
                                         {keys.map((key) => {

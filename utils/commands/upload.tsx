@@ -1,7 +1,7 @@
 import { useMemo } from "preact/hooks";
 import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
-import { CommandRecord } from "../../components/CommandRecord.tsx";
+import { CommandRecord } from "../../islands/CommandRecord.tsx";
 import { useFilePicker } from "../../hooks/useFilePicker.ts";
 import { CommandLineError } from "../../components/CommandLineError.tsx";
 import { Table, TableColumn } from "../../islands/Table.tsx";

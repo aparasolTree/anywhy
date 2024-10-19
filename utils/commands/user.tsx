@@ -1,6 +1,6 @@
 import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
-import { CommandRecord } from "../../components/CommandRecord.tsx";
+import { CommandRecord } from "../../islands/CommandRecord.tsx";
 import { fetcher } from "../fetcher.ts";
 import { createFetcherURL } from "../common.ts";
 import type { User } from "../kv/user.kv.ts";

@@ -1,7 +1,7 @@
 import { useRef } from "preact/hooks";
 import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
-import { CommandRecord } from "../../components/CommandRecord.tsx";
+import { CommandRecord } from "../../islands/CommandRecord.tsx";
 import { RequestConfirm } from "../../islands/RequestConfirm.tsx";
 import { usePromise } from "../../hooks/usePromise.ts";
 import { fetcher } from "../fetcher.ts";

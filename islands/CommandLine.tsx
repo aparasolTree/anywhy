@@ -21,6 +21,7 @@ import { useSetState } from "../hooks/useSetState.ts";
 import { CommandCacheLUR } from "../utils/CommandCacheLUR.ts";
 import { userCommand } from "../utils/commands/user.tsx";
 import { toast } from "../utils/toast/index.ts";
+import { emailCommand } from "../utils/commands/email.tsx";
 
 export function CommandLine() {
     const [show, { toggle }] = useToggleState();
@@ -74,6 +75,7 @@ const commandLineCommands = {
     blog: blogCommand,
     kv: kvCommand,
     user: userCommand,
+    email: emailCommand,
 };
 type CommandLineCommandsKey = keyof typeof commandLineCommands;
 type CommandLineState = { value: string; matchCommand: string };
@@ -117,7 +119,6 @@ function CommandLineInput() {
         }
     };
 
-    const divRef = useScrollToLastElementChild<HTMLDivElement>();
     const clear = useCallback(() => setCommandRecord([]), []);
     useShortcutKey("l", clear, { modifier: "ctrl", eventName: "keydown" });
     return (
@@ -137,12 +138,11 @@ function CommandLineInput() {
                 </div>
             </div>
             <div
-                ref={divRef}
                 style={{
                     backgroundImage: "radial-gradient(#f1f5f8 20%, transparent 0)",
                     backgroundSize: "16px 16px",
                 }}
-                class="mt-4 rounded-lg bg-white h-[65vh] overflow-auto p-5 flex flex-col items-start gap-6"
+                class="mt-4 rounded-lg bg-white h-[65vh] overflow-auto p-5"
             >
                 {commandRecord.length
                     ? commandRecord.map(({ command, body }, i) =>

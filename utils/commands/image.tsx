@@ -11,7 +11,7 @@ import { formatDate } from "../formatDate.ts";
 import { ImageEntry } from "../type.ts";
 import { toast } from "../toast/index.ts";
 import { CommandLineLoading } from "../../components/CommandLineLoading.tsx";
-import { CommandRecord } from "../../components/CommandRecord.tsx";
+import { CommandRecord } from "../../islands/CommandRecord.tsx";
 import { CopyButton } from "../../islands/CopyButton.tsx";
 import { CommandLineImageCheck } from "../../islands/CommandLineImageCheck.tsx";
 import { RequestConfirm } from "../../islands/RequestConfirm.tsx";
@@ -63,7 +63,7 @@ imageCommand.add(({ cache, space, reload = false }) => {
         const { data, status, msg } = usePromise(imageCacheData, []);
         return (
             <CommandRecord command={command}>
-                <Switch when={status} keepAlive={false} animation={false}>
+                <Switch when={status}>
                     <Case value="loading" content={<CommandLineLoading />} />
                     <Case value="error" content={<CommandLineError errorMessage={msg} />} />
                     <Case
@@ -125,8 +125,10 @@ function SetCacheSpace({ space }: { space: string }) {
 function requestRemoveImage(id: string) {
     const formData = new FormData();
     formData.append("id", id);
-    formData.append("action", "delete");
-    return fetcher("/admin/image", { method: "POST", body: formData });
+    return fetcher("/admin/image", {
+        method: "POST",
+        body: formData,
+    });
 }
 
 function RemoveImage({ id }: { id: string }) {
@@ -222,7 +224,7 @@ imageCommand.add((args) => {
         if (keys.length === 0) keys = Object.keys(entryKeyMap) as (keyof ImageEntry)[];
         return (
             <CommandRecord command={command}>
-                <Switch when={status} keepAlive={false} animation={false}>
+                <Switch when={status}>
                     <Case value="loading" content={<CommandLineLoading />} />
                     <Case value="error" content={<CommandLineError errorMessage={msg} />} />
                     <Case

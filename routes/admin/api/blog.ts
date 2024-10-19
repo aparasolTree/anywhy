@@ -1,5 +1,5 @@
 import { getBlogList } from "../../../utils/blog.ts";
-import { clamp, validateNumber } from "../../../utils/common.ts";
+import { clamp, pick, validateNumber } from "../../../utils/common.ts";
 import { define } from "../../../utils/define.ts";
 import { getBlogViews } from "../../../utils/kv/blog.kv.ts";
 import { badRequest, json } from "../../../utils/response.ts";
@@ -10,7 +10,8 @@ export const handler = define.handlers(async ({ url }) => {
     const limitNum = clamp(validateNumber(limit, "limit"), 0, 100);
     const { blogs, total } = await getBlogList();
     if (total <= (pageNum - 1) * limitNum) return badRequest("查询的数据范围已超过已有数据的最大范围");
-    const list = await Promise.all(blogs.map(async ({ filename }) => ({
+    const list = await Promise.all(blogs.map(async ({ filename, attrs }) => ({
+        ...pick(attrs, ["date", "tags"]),
         title: filename,
         views: await getBlogViews(filename),
     })));

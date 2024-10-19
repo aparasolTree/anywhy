@@ -2,7 +2,7 @@ import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
 import { fetcher } from "../fetcher.ts";
 import { usePromise } from "../../hooks/usePromise.ts";
-import { CommandRecord } from "../../components/CommandRecord.tsx";
+import { CommandRecord } from "../../islands/CommandRecord.tsx";
 import { Case, Switch } from "../../islands/Switch.tsx";
 import { CommandLineLoading } from "../../components/CommandLineLoading.tsx";
 import { CommandLineError } from "../../components/CommandLineError.tsx";
@@ -34,7 +34,7 @@ accessCommand.add(({ year = String(new Date().getFullYear()), reload }) => {
         const { data, status, msg } = usePromise(accessData, []);
         return (
             <CommandRecord command={command}>
-                <Switch when={status} animation={false} keepAlive={false}>
+                <Switch when={status}>
                     <Case value="loading" content={<CommandLineLoading />} />
                     <Case value="error" content={<CommandLineError errorMessage={msg} />} />
                     <Case

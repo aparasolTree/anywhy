@@ -1,5 +1,5 @@
 import { parseArgs } from "@std/cli/parse-args";
-import { CommandRecord } from "../../components/CommandRecord.tsx";
+import { CommandRecord } from "../../islands/CommandRecord.tsx";
 import { createCommandLineHandler } from "../command.ts";
 
 export const gotoCommand = createCommandLineHandler("goto", {

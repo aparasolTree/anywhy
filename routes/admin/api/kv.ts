@@ -1,9 +1,8 @@
-import { resetKv } from "../../../tasks/resetKv.ts";
 import { define } from "../../../utils/define.ts";
 import { formDataVerify } from "../../../utils/formDataVerify.ts";
 import { imageDataCache } from "../../../utils/image-data-cache.ts";
 import { clearImageKvData } from "../../../utils/kv/image.kv.ts";
-import { createAdmin } from "../../../utils/kv/index.ts";
+import { createAdmin, kv } from "../../../utils/kv/index.ts";
 import { clearUserKvData } from "../../../utils/kv/user.kv.ts";
 import { badRequest, json } from "../../../utils/response.ts";
 
@@ -18,9 +17,15 @@ export const handler = define.handlers({
                 await clearUserKvData();
                 await createAdmin();
                 break;
-            case "all":
-                await resetKv();
+            case "all": {
+                const list = kv.list({ prefix: [] });
+                let atomic = kv.atomic();
+                for await (const { key } of list) {
+                    atomic = atomic.delete(key);
+                }
+                await atomic.commit();
                 break;
+            }
             case "image":
                 await clearImageKvData();
                 await imageDataCache.clear();

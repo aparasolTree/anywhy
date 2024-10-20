@@ -24,6 +24,7 @@ export const handler = define.handlers({
                     atomic = atomic.delete(key);
                 }
                 await atomic.commit();
+                await createAdmin();
                 break;
             }
             case "image":

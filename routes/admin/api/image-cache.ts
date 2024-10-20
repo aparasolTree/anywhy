@@ -10,7 +10,7 @@ export const handler = define.handlers({
         return json({
             size: Number(size.value),
             total: Number(total.value),
-            space: getImageDataCacheSpace(),
+            space: await getImageDataCacheSpace(),
         });
     },
 
@@ -19,7 +19,7 @@ export const handler = define.handlers({
             space: { type: "String", required: true, custom: (_, val) => /^((-|\+)(\d+))$/.test(val) ? "" : "space: 格式错误，" + val },
         });
         if (error) return badRequest(error);
-        setImageDataCacheSpace(Number(space));
+        await setImageDataCacheSpace(Number(space));
         return json({ ok: true });
     },
 });

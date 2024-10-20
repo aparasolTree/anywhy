@@ -1,6 +1,7 @@
 import { HttpError } from "fresh";
 import { asset } from "fresh/runtime";
 import { define } from "../utils/define.ts";
+import { getErrorMessage } from "../utils/common.ts";
 
 export function ServerCodeError({ src, desc }: { src: string; desc: string }) {
     return (
@@ -28,7 +29,7 @@ export default define.page(function ErrorRoute({ error }) {
     return (
         <ServerCodeError
             src="/svg/server_down.svg"
-            desc="(╯▔皿▔)╯ 哎呀！出了点问题。"
+            desc={"(╯▔皿▔)╯ 哎呀！出了点问题。" + getErrorMessage(error)}
         />
     );
 });

@@ -1,3 +1,4 @@
+import { resetKv } from "../../../tasks/resetKv.ts";
 import { define } from "../../../utils/define.ts";
 import { formDataVerify } from "../../../utils/formDataVerify.ts";
 import { imageDataCache } from "../../../utils/image-data-cache.ts";
@@ -18,10 +19,7 @@ export const handler = define.handlers({
                 await createAdmin();
                 break;
             case "all":
-                await clearUserKvData();
-                await createAdmin();
-                await clearImageKvData();
-                await imageDataCache.clear();
+                await resetKv();
                 break;
             case "image":
                 await clearImageKvData();

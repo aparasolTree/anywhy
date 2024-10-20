@@ -1,6 +1,5 @@
 import { getValue, kv, list } from "./index.ts";
 import { uuid } from "../cropty.ts";
-import { setUserAccess } from "./access.kv.ts";
 import {
     ANYWHY_KV_KEY,
     ANYWHY_KV_USER_EMAIL_KEY,
@@ -66,12 +65,11 @@ export async function setUserEntryByCSV(readable: ReadableStream<Uint8Array>) {
             new CsvParseStream({ skipFirstRow: true, columns: UserEntryKey }),
         );
     for await (const value of stream) {
-        const { access, ...entry } = Object.fromEntries(
+        const entry = Object.fromEntries(
             Object.entries(value).map(([key, val]) => {
                 return [key, JSON.parse(unescape(atob(val)))];
             }),
         );
-        await setUserAccess(entry.id, BigInt(access));
         await createUser(entry as User);
     }
 }

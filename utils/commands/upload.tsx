@@ -1,4 +1,4 @@
-import { useMemo } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import { parseArgs } from "@std/cli/parse-args";
 import { createCommandLineHandler } from "../command.ts";
 import { CommandRecord } from "../../islands/CommandRecord.tsx";
@@ -25,6 +25,7 @@ export const uploadCommand = createCommandLineHandler("upload", {
 
 uploadCommand.add(() => {
     return ({ command }) => {
+        const [disabled, setDisabled] = useState(false);
         const [{ error, files }, { onInput, remove }] = useFilePicker({ accept: [".jpg", ".jpeg"] });
         const showFilesInfo = useMemo(() => files.map(({ name, size, type }) => ({ name, size, type })), [files]);
         const inputRef = useMountedClick<HTMLInputElement>();
@@ -49,8 +50,9 @@ uploadCommand.add(() => {
                                     title="操作"
                                     render={({ name }: { name: string }) => (
                                         <button
-                                            class="my-4 text-red-500 text-sm"
-                                            onClick={() => remove(name)}
+                                            disabled={disabled}
+                                            onClick={() => !disabled && remove(name)}
+                                            class="my-4 text-red-500 text-sm disabled:opacity-50"
                                         >
                                             删除文件
                                         </button>
@@ -60,6 +62,7 @@ uploadCommand.add(() => {
                             <RequestConfirm
                                 no={<div>用户取消上传</div>}
                                 yes={<UploadFile files={files} />}
+                                onSubmit={() => setDisabled(true)}
                                 title="(╹ڡ╹ ) 是否上传当前选择的文件？"
                             />
                         </div>

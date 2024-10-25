@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useRef, useState } from "preact/hooks";
 import { ComponentChild, isValidElement, toChildArray } from "preact";
 import { createContextFactory } from "../utils/createContextFactory.ts";
 import { useAnimationToggle } from "../hooks/useAnimationToggle.ts";
 import { useUpdateEffect } from "../hooks/useUpdateEffect.ts";
-import { isFunction } from "../utils/common.ts";
+import { isFunction, noop } from "../utils/common.ts";
+import { useUnmount } from "../hooks/useUnmount.ts";
+import { AnyFuncion } from "../utils/type.ts";
 
 const [useSwitch, SwitchProvider] = createContextFactory<{ when: unknown; keepAlive: boolean; animation: boolean; updateHeight: (height: number) => void }>();
 export function Switch<T>(
@@ -18,7 +20,14 @@ export function Switch<T>(
     const childrens = toChildArray(children)
         .filter((child) => isValidElement(child) && isFunction(child.type) && child.type.displayName === "Case");
     return (
-        <SwitchProvider value={{ when, keepAlive, animation, updateHeight: useCallback((height: number) => setHeight(height), []) }}>
+        <SwitchProvider
+            value={{
+                when,
+                keepAlive,
+                animation,
+                updateHeight: useCallback((height: number) => setHeight(height), []),
+            }}
+        >
             <div class="relative w-full h-full" style={{ height }}>
                 {childrens}
             </div>
@@ -41,23 +50,22 @@ export function Case<T>(
     const [state, toggle] = useAnimationToggle(when === value, { timeout: 1000 });
     const alive = typeof keepAlive === "boolean" ? keepAlive : pKeepAlive;
     useUpdateEffect(() => toggle(when === value), [when, value, toggle]);
-    const ref = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (!animation) return;
-        const element = ref.current;
-        if (!element) return;
-        const mutationObserver = new ResizeObserver(() => updateHeight(element.offsetHeight));
-        mutationObserver.observe(element);
-        return () => {
-            mutationObserver.disconnect();
-        };
-    }, [animation]);
+
+    const clear = useRef<AnyFuncion>(noop);
+    useUnmount(() => clear.current());
 
     if (!animation && !state.enter) return null;
     if (state.remove && !alive) return null;
     return (
         <div
-            ref={ref}
+            ref={(element) => {
+                if (!animation || !element) return;
+                clear.current();
+                updateHeight(element.getBoundingClientRect().height);
+                const mutationObserver = new ResizeObserver(() => updateHeight(element.getBoundingClientRect().height));
+                clear.current = () => mutationObserver.disconnect();
+                mutationObserver.observe(element, { box: "border-box" });
+            }}
             class={[
                 animation ? ["absolute w-full", state.enter ? enter : leave].join(" ") : "",
                 keepAlive ? (state.remove ? "hidden" : "block") : "",

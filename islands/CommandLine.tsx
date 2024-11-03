@@ -6,7 +6,6 @@ import { useToggleState } from "../hooks/useToggle.ts";
 import { Modal } from "./Modal.tsx";
 import { isFunction } from "../utils/common.ts";
 import { checkImageEvent } from "../utils/commandLineEvent.ts";
-import { useScrollToLastElementChild } from "../hooks/useScrollToLastElementChild.ts";
 import { useInputFocus } from "../hooks/useInputFocus.ts";
 import { imageCommand } from "../utils/commands/image.tsx";
 import { accessCommand } from "../utils/commands/access.tsx";

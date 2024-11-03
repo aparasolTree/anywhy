@@ -33,7 +33,7 @@
         "tailwindcss/plugin": "npm:tailwindcss@3.4.3/plugin.js"
     },
     "compilerOptions": {
-        "lib": ["dom", "dom.asynciterable", "deno.ns", "deno.unstable", "dom.iterable"],
+        "lib": ["dom", "dom.asynciterable", "deno.ns", "deno.unstable", "dom.iterable", "ESNEXT"],
         "jsx": "precompile",
         "jsxImportSource": "preact",
         "jsxPrecompileSkipElements": ["a", "img", "source", "body", "html", "head"]

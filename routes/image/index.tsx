@@ -6,6 +6,7 @@ import { ImagePreview } from "./(_islands)/ImagePreview.tsx";
 import { BackToTop } from "./(_islands)/BackToTop.tsx";
 import { clamp, getErrorMessage, validateNumber } from "../../utils/common.ts";
 import { badRequest, json } from "../../utils/response.ts";
+import { getUserSession } from "../../utils/user.session.ts";
 
 export const handler = define.handlers({
     async GET({ req, url, state }) {
@@ -34,7 +35,10 @@ export const handler = define.handlers({
 
             state.title = "我的个人作品";
             state.description = "个人的摄影作品，可在任何地方使用，免费下载，无需注明归属";
-            return isJOSN ? json(result) : page(result);
+            return isJOSN ? json(result) : page({
+                ...result,
+                isAdmin: (await (await getUserSession(req)).getUser())?.role === "admin",
+            });
         } catch (error) {
             return badRequest(getErrorMessage(error));
         }
@@ -42,7 +46,7 @@ export const handler = define.handlers({
 });
 
 export default define.page<typeof handler>(({ state, url, data }) => {
-    const { imageEntries, page, limit, total } = data;
+    const { imageEntries, page, limit, total, isAdmin } = data;
     return (
         <div>
             <Header active={url.pathname} user={state.user} className="bg-white" />
@@ -51,7 +55,12 @@ export default define.page<typeof handler>(({ state, url, data }) => {
             </h2>
             <main class="px-[200px] py-6">
                 <h3 class="mb-6 text-2xl">个人摄影作品展示</h3>
-                <ImagePreview imageEntries={imageEntries} page={page} limit={limit} />
+                <ImagePreview
+                    page={page}
+                    limit={limit}
+                    isAdmin={isAdmin}
+                    imageEntries={imageEntries}
+                />
             </main>
             <BackToTop />
         </div>

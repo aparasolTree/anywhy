@@ -31,9 +31,7 @@ export default define.page<typeof handler>(function Blog({ url, state, data }) {
                     <div class="grid grid-cols-3 gap-6">
                         {slice(blogs, 3).map((col) => (
                             <div>
-                                {col.map(({ attrs, filename }) => (
-                                    <BlogOverview {...attrs} routePath={currentUrl + filename} />
-                                ))}
+                                {col.map(({ attrs, filename }) => <BlogOverview {...attrs} routePath={currentUrl + filename} />)}
                             </div>
                         ))}
                     </div>
@@ -84,7 +82,14 @@ function BlogOverview({
                 <p class="text-xs text-gray-400 mt-2">{description}</p>
             </a>
             <div class="group-hover:block hidden absolute top-5 right-5">
-                <CopyButton text={routePath} content="复制当前文章链接" />
+                <CopyButton
+                    text={routePath}
+                    content={
+                        <span class="text-white bg-green-500 rounded-md px-4 py-2">
+                            复制当前文章链接
+                        </span>
+                    }
+                />
             </div>
         </div>
     );

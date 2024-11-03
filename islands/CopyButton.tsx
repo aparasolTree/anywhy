@@ -1,9 +1,10 @@
+import { ComponentChild } from "preact";
 import { useClipboardCopy } from "../hooks/useClipboard.ts";
 import { toast } from "../utils/toast/index.ts";
 
 export interface CopyProps {
     text: string;
-    content: string;
+    content: ComponentChild;
     className?: string;
 }
 

@@ -29,11 +29,11 @@ export const imageCommand = createCommandLineHandler("image", {
         order: ["remove", "help", "cache", "space"],
         sort: ["remove", "help", "cache", "space"],
         filter: ["remove", "help", "cache", "space"],
-        id: ["help", "list", "cache", "page", "limit", "pick", "order", "sort", "reload", "filter", "space"],
+        name: ["help", "list", "cache", "page", "limit", "pick", "order", "sort", "reload", "filter", "space"],
     },
     parse: (args) =>
         parseArgs(args, {
-            string: ["id", "page", "limit", "pick", "order", "sort", "filter", "space"],
+            string: ["name", "page", "limit", "pick", "order", "sort", "filter", "space"],
             boolean: ["remove", "help", "list", "cache", "reload"],
             alias: {
                 pick: "k",
@@ -122,17 +122,17 @@ function SetCacheSpace({ space }: { space: string }) {
 }
 
 // remove image
-function requestRemoveImage(id: string) {
+function requestRemoveImage(name: string) {
     const formData = new FormData();
-    formData.append("id", id);
+    formData.append("name", name);
     return fetcher("/admin/image", {
         method: "POST",
         body: formData,
     });
 }
 
-function RemoveImage({ id }: { id: string }) {
-    const { data, status, msg } = usePromise(() => requestRemoveImage(id), []);
+function RemoveImage({ name }: { name: string }) {
+    const { data, status, msg } = usePromise(() => requestRemoveImage(name), []);
     return (
         <Switch when={status}>
             <Case value="loading" content={<CommandLineLoading tip="正在请求删除,请稍后..." />} />
@@ -142,20 +142,20 @@ function RemoveImage({ id }: { id: string }) {
     );
 }
 
-imageCommand.add(({ remove, id }) => {
+imageCommand.add(({ remove, name }) => {
     if (!remove) return null;
     return ({ command }) => {
         return (
             <CommandRecord command={command}>
-                {id
+                {name
                     ? (
                         <RequestConfirm
                             title="你确定要删除图片？"
-                            yes={<RemoveImage id={id} />}
+                            yes={<RemoveImage name={name} />}
                             no={<div>删除取消</div>}
                         />
                     )
-                    : <span class="text-red-500">参数--id不能为空</span>}
+                    : <span class="text-red-500">参数--name不能为空</span>}
             </CommandRecord>
         );
     };

@@ -9,8 +9,8 @@ export function CommandRecord({ command, children }: { command: string; children
         const element = ref.current;
         if (!element) return;
         const scrollIntoView = () => element?.scrollIntoView({ behavior: "smooth", block: "start" });
-        const mutationObserver = new MutationObserver(debounce(scrollIntoView, 20));
-        mutationObserver.observe(element, { childList: true, subtree: true, characterData: true, attributes: true });
+        const mutationObserver = new ResizeObserver(debounce(scrollIntoView, 20));
+        mutationObserver.observe(element, { box: "border-box" });
         scrollIntoView();
         return () => {
             mutationObserver.disconnect();

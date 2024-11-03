@@ -23,6 +23,7 @@ import { useImageLazyLoading } from "../../../hooks/useImageLazyLoading.ts";
 import { useSetRef } from "../../../hooks/useSetRef.ts";
 import { toast } from "../../../utils/toast/index.ts";
 import { useModal } from "../../../islands/Modal.tsx";
+import { CopyButton } from "../../../islands/CopyButton.tsx";
 
 export interface ImagePreviewContext {
     imageEntry: ImageEntry;
@@ -38,9 +39,10 @@ export interface ImagePreviewProps {
     imageEntries: ImageEntry[];
     page: number;
     limit: number;
+    isAdmin?: boolean;
 }
 
-export function ImagePreview({ imageEntries, page, limit }: ImagePreviewProps) {
+export function ImagePreview({ imageEntries, page, limit, isAdmin }: ImagePreviewProps) {
     const [imageEntriesState, setImageEntriesState] = useState(imageEntries);
     const [imageEntryIndex, setImageEntryIndex] = useState<number>(0);
     const length = useLatest(imageEntriesState.length);
@@ -107,7 +109,7 @@ export function ImagePreview({ imageEntries, page, limit }: ImagePreviewProps) {
             </ImageWaterfall>
             {value.imageEntry && (
                 <Modal show={show} onClose={close}>
-                    <Preview />
+                    <Preview isAdmin={isAdmin} />
                 </Modal>
             )}
             <LoadMore onFetchMore={onFetchMore} />
@@ -115,7 +117,7 @@ export function ImagePreview({ imageEntries, page, limit }: ImagePreviewProps) {
     );
 }
 
-function Preview() {
+function Preview({ isAdmin }: { isAdmin?: boolean }) {
     const { imageEntry, activeIndex, length } = useImagePreview();
     const { height, width, name, exif, id, views, size, downloads } = imageEntry;
     useEffect(() => {
@@ -132,7 +134,7 @@ function Preview() {
             <ImageSize size={size} width={width} height={height} />
             <ImageExif exif={exif || {}} />
             <div class="mb-4 flex justify-between">
-                <h3>{name}</h3>
+                {isAdmin ? <CopyButton text={name} content={name} className="hover:underline" /> : <h3>{name}</h3>}
                 <ImageViews views={views || 0} />
             </div>
             <ImagePreviewWrapper width={width} height={height} name={name} />
@@ -315,11 +317,18 @@ interface ImageExifProps {
     exif: ExifInfo;
 }
 function ImageExif({ exif }: ImageExifProps) {
-    const [show, { open, close }] = useToggleState(false);
-    const { atTop } = useModal();
-    useShortcutKey("e", () => atTop && (!show ? open() : close()));
+    const hasExifInfo = !!Object.keys(exif).length;
+    const [show, { toggle, open, close }] = useToggleState(false);
+    useShortcutKey("e", () => toggle());
     return (
-        <button onClick={open} class="bg-white rounded-md absolute top-0 left-[105%] p-[6px]">
+        <button
+            onClick={() => hasExifInfo && open()}
+            title={!hasExifInfo ? "当前图片不存在元信息" : ""}
+            class={[
+                "bg-white rounded-md absolute top-0 left-[105%] p-[6px]",
+                hasExifInfo ? "" : "bg-opacity-50 cursor-not-allowed",
+            ].join(" ")}
+        >
             <span class="text-[#1C274C] text-[20px]">
                 <InfoSVG />
             </span>

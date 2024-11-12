@@ -168,7 +168,7 @@ const commandTip = {
     image: [
         "image --cache [--reload]",
         "image --cache --space <number>",
-        "image --remove --id <string>",
+        "image --remove --name <string>",
         "image --list [-f/--filter <string>] [-p/--page <number>] [-l/--limit <number>] [-o/--order <string>] [-s/--sort <string>] [-k/--pick <string>] [--reload]",
     ],
 };

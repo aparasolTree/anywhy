@@ -13,7 +13,7 @@ export function Notify() {
     const [viewed, setViewed] = useLocalStorage<boolean>("viewed", true);
     const [show, { close, open }] = useToggleState();
     useEffect(() => {
-        fetcher<null | { images: NotifyImagesData[]; id?: string }>("/admin/api/notify?id=" + (id || ""))
+        fetcher<null | { images: NotifyImagesData[]; id?: string }>("/notify?id=" + (id || ""))
             .then((data) => {
                 if (data) {
                     setState(data);
@@ -33,7 +33,7 @@ export function Notify() {
                     )
                     : null}
             </button>
-            <Modal show={show} onClose={close} class="bg-white p-6 rounded-md">
+            <Modal show={show && !!images.length} onClose={close} class="bg-white p-6 rounded-md">
                 <h2 class="text-center text-xl">最近一次上传的图片</h2>
                 <LatestUploadImages images={images} onOpen={() => setViewed(true)} />
             </Modal>

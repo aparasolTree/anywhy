@@ -1,6 +1,7 @@
 import { Bread } from "./Icons/Bread.tsx";
 import { DropDown, DropDownContent } from "./DropDown.tsx";
 import { User } from "../utils/kv/user.kv.ts";
+import { Notify } from "../islands/Notify.tsx";
 
 export interface HeaderProps {
     active: string;
@@ -27,6 +28,7 @@ export function Header({ active, user, className }: HeaderProps) {
                 )}
             <div class="flex flex-1 justify-end items-center gap-4">
                 <NavBar active={active} />
+                <Notify />
                 <LoginInfo user={user} active={active} />
             </div>
         </header>
@@ -89,7 +91,7 @@ export interface UserProps {
     active: string;
 }
 
-export function UserInfo({ user, active }: UserProps) {
+export function UserInfo({ user }: UserProps) {
     return (
         <DropDown>
             <div class="flex items-center bg-white shadow-md rounded-md px-3 py-1">

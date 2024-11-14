@@ -43,3 +43,7 @@ export const ANYWHY_KV_EMAIL_LIMITS_DAY = "ANYWHY_KV_EMAIL_LIMITS_DAY";
 
 // other
 export const defaultWindow = globalThis || window;
+
+//notify
+export const ANYWHY_KV_NOTIFY_IMAGES_KEY = "ANYWHY_KV_NOTIFY_IMAGES_KEY";
+export const ANYWHY_KV_NOTIFY_ID_KEY = "ANYWHY_KV_NOTIFY_ID_KEY";

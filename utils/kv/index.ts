@@ -30,7 +30,9 @@ export async function getValues<T extends any[]>(keys: { [K in keyof T]: Deno.Kv
     consistency?: Deno.KvConsistencyLevel;
 }) {
     const values = await kv.getMany<T>(keys, options);
-    return values.map(({ value }) => value) as T;
+    return values.map(({ value }) => value) as {
+        [K in keyof T]?: T[K];
+    };
 }
 
 export interface ListOptions<A, R> extends Deno.KvListOptions {

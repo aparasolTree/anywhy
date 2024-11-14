@@ -24,6 +24,7 @@ import { useSetRef } from "../../../hooks/useSetRef.ts";
 import { toast } from "../../../utils/toast/index.ts";
 import { useModal } from "../../../islands/Modal.tsx";
 import { CopyButton } from "../../../islands/CopyButton.tsx";
+import { ImageWaterfall } from "../../../islands/ImageWaterfall.tsx";
 
 export interface ImagePreviewContext {
     imageEntry: ImageEntry;
@@ -431,49 +432,6 @@ function Image({ imageEntry, observer, onClick }: ImageProps) {
             />
         </div>
     );
-}
-
-interface ImageWaterfallProps<T> {
-    data: T[];
-    children: (val: T) => ComponentChild;
-}
-
-function ImageWaterfall<T extends Size>({ data, children }: ImageWaterfallProps<T>) {
-    const waterfall = useMemo(() => calcWaterfallPosition<T>(data), [data]);
-    return (
-        <div class="flex gap-4">
-            {waterfall.map((col) => {
-                return (
-                    <div class="flex flex-1 flex-col gap-4">
-                        {col.map((item) => children(item))}
-                    </div>
-                );
-            })}
-        </div>
-    );
-}
-
-const getMinValueIndex = (arr: number[]) => arr.reduce((acc, val, index) => arr[acc] > val ? index : acc, 0);
-
-type Size = { height: number; width: number };
-const calcHeight = ({ width, height }: Size, W: number = 300) => (height / width) * W;
-
-function calcWaterfallPosition<T extends Size>(entries: T[], rows: number = 3): T[][] {
-    if (entries.length === 0) return [];
-
-    const entryList: T[][] = Array.from({ length: rows }, () => []);
-    for (let i = 0; i < Math.min(rows, entries.length); i++) {
-        entryList[i].push(entries[i]);
-    }
-
-    const colHeightList = entryList.map((row) => row.reduce((sum, entry) => sum + calcHeight(entry), 0));
-    for (let i = rows; i < entries.length; i++) {
-        const minHeightIndex = getMinValueIndex(colHeightList);
-        entryList[minHeightIndex].push(entries[i]);
-        colHeightList[minHeightIndex] += calcHeight(entries[i]);
-    }
-
-    return entryList;
 }
 
 interface ImageScalingCheckProps {

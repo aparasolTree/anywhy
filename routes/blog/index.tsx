@@ -15,9 +15,10 @@ export const handler = define.handlers({
 });
 
 export default define.page<typeof handler>(function Blog({ url, state, data }) {
-    const searchTag = url.searchParams.get("tag");
+    const searchTag = url.searchParams.get("tag") || "all";
     const { user } = state;
     const { tags, blogs, total } = data;
+    console.log(tags);
     const currentUrl = `${url.origin}${url.pathname}/`;
     return (
         <div>
@@ -29,7 +30,11 @@ export default define.page<typeof handler>(function Blog({ url, state, data }) {
                 <Partial name="blog-list">
                     <Tags tags={tags} currentTag={searchTag} />
                     <div class="grid grid-cols-3 gap-6">
-                        {slice(blogs, 3).map((col) => (
+                        {slice(
+                            blogs
+                                .filter(({ attrs }) => attrs.tags.includes(searchTag)),
+                            3,
+                        ).map((col) => (
                             <div>
                                 {col.map(({ attrs, filename }) => <BlogOverview {...attrs} routePath={currentUrl + filename} />)}
                             </div>

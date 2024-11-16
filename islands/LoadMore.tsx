@@ -3,9 +3,10 @@ import { useIntersectionObserver } from "../hooks/useIntersectionObserver.ts";
 import { AnyFuncion } from "../utils/type.ts";
 
 interface LoadMoreProps {
+    loaded: boolean;
     onFetchMore: (unobserver: AnyFuncion) => void;
 }
-export function LoadMore({ onFetchMore }: LoadMoreProps) {
+export function LoadMore({ loaded, onFetchMore }: LoadMoreProps) {
     const ref = useRef<HTMLDivElement>(null);
     const { observer, unobserver } = useIntersectionObserver((entries) => {
         for (const { target, isIntersecting } of entries) {
@@ -26,6 +27,7 @@ export function LoadMore({ onFetchMore }: LoadMoreProps) {
 
     return (
         <div ref={ref} class="h-1 bg-transparent">
+            {loaded ? <div class="py-4 text-gray-400 text-center">o(*￣▽￣*)ブ 到底了</div> : null}
         </div>
     );
 }

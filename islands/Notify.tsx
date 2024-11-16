@@ -46,11 +46,15 @@ function LatestUploadImages({ images, onOpen }: { images: NotifyImagesData[]; on
         onOpen();
     }, []);
     return (
-        <div class="w-[900px] mt-4 max-h-[60vh] overflow-auto">
-            <ImageWaterfall data={images} cols={5}>
-                {({ src }) => {
-                    return <img src={src} alt="" class="w-full rounded-md shadow-sm" />;
-                }}
+        <div class="w-[900px] mt-4 max-h-[65vh] overflow-auto">
+            <ImageWaterfall data={images} cols={3}>
+                {({ src }) => (
+                    <img
+                        alt=""
+                        src={src}
+                        class="w-full rounded-md shadow-sm"
+                    />
+                )}
             </ImageWaterfall>
         </div>
     );

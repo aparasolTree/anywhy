@@ -113,7 +113,7 @@ export function ImagePreview({ imageEntries, page, limit, isAdmin }: ImagePrevie
                     <Preview isAdmin={isAdmin} />
                 </Modal>
             )}
-            <LoadMore onFetchMore={onFetchMore} />
+            <LoadMore onFetchMore={onFetchMore} loaded={ref.current.done} />
         </ImagePreviewProvider>
     );
 }

@@ -58,7 +58,14 @@ export async function getBlogList(tag?: string) {
             entries.push(path);
         });
         cachedBlogTotal++;
-        cachedBlog.set(path, { attrs, filename: name, path });
+        cachedBlog.set(path, {
+            attrs: {
+                ...attrs,
+                tags: ["all", ...attrs.tags],
+            },
+            filename: name,
+            path,
+        });
     }
     isCached = true;
     return getBlogCache(tag);

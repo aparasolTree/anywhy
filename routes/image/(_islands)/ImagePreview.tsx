@@ -428,7 +428,7 @@ function Image({ imageEntry, observer, onClick }: ImageProps) {
                 loading="lazy"
                 alt="个人图像作品"
                 src={asset("/duck.png")}
-                class="absolute right-0 left-0 top-0 bottom-0"
+                class="absolute right-0 left-0 top-0 bottom-0 w-full"
             />
         </div>
     );

@@ -7,6 +7,7 @@ import { BackToTop } from "./(_islands)/BackToTop.tsx";
 import { clamp, getErrorMessage, validateNumber } from "../../utils/common.ts";
 import { badRequest, json } from "../../utils/response.ts";
 import { getUserSession } from "../../utils/user.session.ts";
+import { Tags } from "../../components/Tags.tsx";
 
 export const handler = define.handlers({
     async GET({ req, url, state }) {
@@ -54,7 +55,7 @@ export default define.page<typeof handler>(({ state, url, data }) => {
                 Image <span class="text-xl">({total})</span>
             </h2>
             <main class="px-[200px] py-6">
-                <h3 class="mb-6 text-2xl">个人摄影作品展示</h3>
+                {/* <Tags href="/image" title="个人摄影作品展示" tags={[{ tag: "人像", total: 10 }]} currentTag={""} /> */}
                 <ImagePreview
                     page={page}
                     limit={limit}

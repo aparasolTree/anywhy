@@ -18,7 +18,6 @@ export default define.page<typeof handler>(function Blog({ url, state, data }) {
     const searchTag = url.searchParams.get("tag") || "all";
     const { user } = state;
     const { tags, blogs, total } = data;
-    console.log(tags);
     const currentUrl = `${url.origin}${url.pathname}/`;
     return (
         <div>
@@ -28,7 +27,7 @@ export default define.page<typeof handler>(function Blog({ url, state, data }) {
                     Blog <span class="text-xl">({total})</span>
                 </h2>
                 <Partial name="blog-list">
-                    <Tags tags={tags} currentTag={searchTag} />
+                    <Tags href="/blog" title="通过标签搜索" tags={tags} currentTag={searchTag} />
                     <div class="grid grid-cols-3 gap-6">
                         {slice(
                             blogs

@@ -23,9 +23,10 @@ import { toast } from "../utils/toast/index.ts";
 import { emailCommand } from "../utils/commands/email.tsx";
 
 export function CommandLine() {
-    const [show, { toggle }] = useToggleState();
+    const [show, { toggle, close }] = useToggleState();
     const reset = useCallback(() => toggle(false), []);
     useShortcutKey("p", () => toggle(), { modifier: "ctrl", eventName: "keydown" });
+    useShortcutKey("Escape", close);
     return (
         <Modal direction="top" show={show} onClose={reset} class="mt-20 w-[75vw]">
             <ImageView />

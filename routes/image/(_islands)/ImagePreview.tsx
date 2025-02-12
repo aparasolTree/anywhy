@@ -1,6 +1,5 @@
 import { asset } from "fresh/runtime";
-import { ComponentChild } from "preact";
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import type { AnyFuncion, ExifInfo, ImageEntry } from "../../../utils/type.ts";
 import { createContextFactory } from "../../../utils/createContextFactory.ts";
 import { Modal } from "../../../islands/Modal.tsx";
@@ -25,6 +24,7 @@ import { toast } from "../../../utils/toast/index.ts";
 import { useModal } from "../../../islands/Modal.tsx";
 import { CopyButton } from "../../../islands/CopyButton.tsx";
 import { ImageWaterfall } from "../../../islands/ImageWaterfall.tsx";
+import { JSX } from "preact";
 
 export interface ImagePreviewContext {
     imageEntry: ImageEntry;
@@ -410,7 +410,7 @@ interface ImageProps {
     onClick: () => void;
 }
 function Image({ imageEntry, observer, onClick }: ImageProps) {
-    const { width, height, name } = imageEntry;
+    const { width, height, name, views, downloads, exif } = imageEntry;
     const ref = useRef<HTMLImageElement>(null);
     useEffect(() => {
         if (ref.current) {
@@ -423,6 +423,10 @@ function Image({ imageEntry, observer, onClick }: ImageProps) {
             style={{ paddingBottom: `${height / width * 100}%` }}
             class="rounded-md overflow-hidden relative bg-slate-100"
         >
+            <div class="absolute right-2 top-2 z-10 gap-2 flex">
+                <CenterBox>{views}</CenterBox>
+                <CenterBox>{downloads}</CenterBox>
+            </div>
             <img
                 ref={ref}
                 loading="lazy"
@@ -432,6 +436,10 @@ function Image({ imageEntry, observer, onClick }: ImageProps) {
             />
         </div>
     );
+}
+
+function CenterBox(props: JSX.ProgressHTMLAttributes<HTMLDivElement>) {
+    return <div class="w-[30px] h-[30px] rounded-md bg-white flex items-center justify-center shadow-md" {...props} />;
 }
 
 interface ImageScalingCheckProps {
